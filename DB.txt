@@ -1,0 +1,994 @@
+-- 1. USERS
+CREATE TABLE users (
+    user_id SERIAL PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL, -- MD5
+    language_pref VARCHAR(10) DEFAULT 'vi',
+    avatar_url TEXT,
+    phone VARCHAR(20),
+    
+    -- Thông tin cá nhân bổ sung
+    address TEXT,                                   -- Địa chỉ người dùng
+    date_of_birth DATE,                             -- Ngày sinh (dùng DATE để dễ tính tuổi)
+    
+    status VARCHAR(20) CHECK (
+        status IN ('active', 'inactive', 'banned')
+    ) DEFAULT 'active',
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 1.2. ROLES
+CREATE TABLE roles (
+    role_id SERIAL PRIMARY KEY,
+    role_name VARCHAR(50) UNIQUE NOT NULL,         -- e.g. 'admin', 'teacher'
+    display_name VARCHAR(100),                     -- e.g. 'Quản trị hệ thống'
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 1.3. USER_ROLES
+CREATE TABLE user_roles (
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    role_id INT REFERENCES roles(role_id) ON DELETE CASCADE,
+    assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, role_id)
+);
+
+DELETE FROM class_group_members;
+DELETE FROM registrations;
+
+-- 1.4. PERMISSIONS
+CREATE TABLE permissions (
+    perm_id SERIAL PRIMARY KEY,
+    perm_key VARCHAR(100) UNIQUE NOT NULL,         -- e.g. 'course.create'
+    module VARCHAR(50),                            -- e.g. 'courses', 'users', 'exams'
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 1.5. ROLE_PERMISSIONS
+CREATE TABLE role_permissions (
+    role_id INT REFERENCES roles(role_id) ON DELETE CASCADE,
+    perm_id INT REFERENCES permissions(perm_id) ON DELETE CASCADE,
+    PRIMARY KEY (role_id, perm_id)
+);
+
+
+-- 2. COURSES
+CREATE TABLE courses (
+    course_id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    image_url TEXT,
+    price NUMERIC(10,2) DEFAULT 0,
+    level VARCHAR(50) CHECK (level IN ('beginner','intermediate','advanced')) DEFAULT 'beginner',
+    duration_weeks INT DEFAULT 4,
+    language VARCHAR(10) DEFAULT 'en',
+    zalo_link TEXT NOT NULL,
+    status VARCHAR(20) CHECK (status IN ('active','inactive','draft')) DEFAULT 'active',
+    teacher_id INT REFERENCES users(user_id) ON DELETE SET NULL,  -- giáo viên phụ trách chính
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,  -- người tạo khóa (admin / academic manager)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 2.1. COURSE_PREREQUISITES
+CREATE TABLE course_prerequisites (
+    id SERIAL PRIMARY KEY,
+    course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,      -- khóa học chính
+    prereq_course_id INT REFERENCES courses(course_id) ON DELETE CASCADE, -- khóa học yêu cầu trước
+    UNIQUE (course_id, prereq_course_id)
+);
+
+-- 2.2. COURSE_TEACHERS
+CREATE TABLE course_teachers (
+    id SERIAL PRIMARY KEY,
+    course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,
+    teacher_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    role_in_course VARCHAR(50) DEFAULT 'instructor', -- instructor / assistant / tutor
+    assigned_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (course_id, teacher_id)
+);
+
+-- 3. LESSONS
+CREATE TABLE lessons (
+    lesson_id SERIAL PRIMARY KEY,
+    course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,
+    title VARCHAR(200) NOT NULL,
+    content TEXT,
+    order_index INT DEFAULT 0,
+
+    -- 🔹 Trạng thái duyệt nội dung
+    approval_status VARCHAR(20) CHECK (approval_status IN ('pending', 'approved', 'rejected')) DEFAULT 'pending',
+    approved_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    approved_at TIMESTAMP,
+    review_note TEXT,           -- Ghi chú phản hồi từ admin (nếu bị từ chối)
+
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 3.1. LESSON MEDIA
+CREATE TABLE lesson_media (
+    media_id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    media_type VARCHAR(50) CHECK (media_type IN ('video','image','pdf')) NOT NULL,
+    media_url TEXT NOT NULL,
+
+    -- 🔹 Thông tin để tính tiến độ
+    duration_seconds INT,       -- Thời lượng video/audio (nếu có)
+    total_pages INT,            -- Số trang nếu là PDF
+
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);s
+
+-- 4. VOCABULARIES
+CREATE TABLE vocabularies (
+    vocab_id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    word VARCHAR(100) NOT NULL,
+    phonetic VARCHAR(100),
+    meaning TEXT,
+    example TEXT,
+    audio_url TEXT,
+    image_url TEXT,  -- 📷 Hình minh họa cho từ
+    part_of_speech VARCHAR(20),  -- danh từ, động từ, tính từ, v.v.
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 1. DICTIONARY_HISTORY - Lịch sử tra cứu từ điển
+CREATE TABLE IF NOT EXISTS dictionary_history (
+    history_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    word VARCHAR(100) NOT NULL,
+    vocab_id INT REFERENCES vocabularies(vocab_id) ON DELETE SET NULL, -- Nếu từ có trong vocabularies
+    searched_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index để tìm kiếm nhanh
+CREATE INDEX IF NOT EXISTS idx_dictionary_history_user_id ON dictionary_history(user_id);
+CREATE INDEX IF NOT EXISTS idx_dictionary_history_searched_at ON dictionary_history(searched_at DESC);
+CREATE INDEX IF NOT EXISTS idx_dictionary_history_word ON dictionary_history(word);
+
+-- 2. DICTIONARY_FAVORITES - Từ yêu thích
+CREATE TABLE IF NOT EXISTS dictionary_favorites (
+    favorite_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    vocab_id INT NOT NULL REFERENCES vocabularies(vocab_id) ON DELETE CASCADE,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(user_id, vocab_id)
+);
+
+-- Index để tìm kiếm nhanh
+CREATE INDEX IF NOT EXISTS idx_dictionary_favorites_user_id ON dictionary_favorites(user_id);
+CREATE INDEX IF NOT EXISTS idx_dictionary_favorites_added_at ON dictionary_favorites(added_at DESC);
+
+
+-- 5. LISTENING EXERCISES (Bài nghe - mỗi audio 1 lần)
+CREATE TABLE listening_exercises (
+    exercise_id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    title VARCHAR(200),
+    audio_url TEXT NOT NULL,
+    transcript TEXT,  -- Lưu nội dung script (tùy chọn)
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5.1. LISTENING QUESTIONS (Các câu hỏi thuộc bài nghe)
+CREATE TABLE listening_questions (
+    question_id SERIAL PRIMARY KEY,
+    exercise_id INT REFERENCES listening_exercises(exercise_id) ON DELETE CASCADE,
+    question_type VARCHAR(20)
+        CHECK (question_type IN ('multiple_choice', 'true_false', 'fill_blank'))
+        DEFAULT 'multiple_choice',
+    question TEXT NOT NULL,
+    options JSONB NOT NULL DEFAULT '[]'::jsonb,
+    correct_answer JSONB NOT NULL DEFAULT '[]'::jsonb,
+    order_index INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5.2. LISTENING_ANSWERS 
+CREATE TABLE listening_attempt_sets (
+    attempt_set_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    exercise_id INT REFERENCES listening_exercises(exercise_id) ON DELETE CASCADE,
+    -- Lần học (attempt) tương ứng
+    reg_id INT REFERENCES registrations(reg_id),
+    correct_count INT DEFAULT 0,
+    total_questions INT DEFAULT 0,
+    accuracy_percent NUMERIC(5,2) DEFAULT 0 CHECK (accuracy_percent BETWEEN 0 AND 100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 5.3. LISTENING_ANSWERS 
+CREATE TABLE listening_answers (
+    answer_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    question_id INT REFERENCES listening_questions(question_id) ON DELETE CASCADE,
+    attempt_set_id INT REFERENCES listening_attempt_sets(attempt_set_id) ON DELETE CASCADE,
+    user_answer JSONB,          -- Thêm để lưu câu trả lời
+    is_correct BOOLEAN,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 7. QUIZZES
+CREATE TABLE quizzes (
+    quiz_id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+
+    -- Nội dung câu hỏi
+    question TEXT NOT NULL,
+    question_type VARCHAR(30)
+        CHECK (question_type IN ('multiple_choice', 'fill_blank', 'ordering'))
+        DEFAULT 'multiple_choice',
+    explanation TEXT,
+
+    -- Dữ liệu động cho từng loại câu hỏi
+    options JSONB DEFAULT '[]'::jsonb,
+    correct_answer JSONB DEFAULT '[]'::jsonb,
+
+    -- Thứ tự và meta
+    order_index INT DEFAULT 0,
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 7.1. QUIZ_ATTEMPT_SETS (lưu mỗi lần nộp bài quiz)
+CREATE TABLE quiz_attempt_sets (
+    attempt_set_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    -- Lần học (attempt) tương ứng
+    reg_id INT REFERENCES registrations(reg_id),
+    average_score NUMERIC(5,2) DEFAULT 0,
+    total_questions INT DEFAULT 0,
+    correct_count INT DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 7.2. QUIZ_ATTEMPTS
+CREATE TABLE quiz_attempts (
+    attempt_id SERIAL PRIMARY KEY,
+
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    quiz_id INT REFERENCES quizzes(quiz_id) ON DELETE CASCADE,
+    attempt_set_id INT REFERENCES quiz_attempt_sets(attempt_set_id) ON DELETE CASCADE,
+
+    -- KẾT QUẢ LẦN LÀM
+    is_correct BOOLEAN,                    -- TRUE nếu đúng hoàn toàn (score = 100)
+    user_answer JSONB,                     -- câu trả lời của học viên (mảng)
+    score_percent NUMERIC(5,2)
+        CHECK (score_percent BETWEEN 0 AND 100),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 8. WRITING EXERCISES
+CREATE TABLE writing_exercises (
+    exercise_id SERIAL PRIMARY KEY,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+    
+    title VARCHAR(200),
+    prompt TEXT NOT NULL,                             -- Đề bài viết
+    sample_answer TEXT,                               -- Bài mẫu (nếu có)
+    word_limit INT CHECK (word_limit >= 0),           -- Giới hạn từ
+    order_index INT DEFAULT 0,
+    
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+); 
+
+
+
+-- 8.1. WRITING SUBMISSIONS (Bài nộp của học viên)
+CREATE TABLE writing_submissions (
+    submission_id SERIAL PRIMARY KEY,
+    exercise_id INT REFERENCES writing_exercises(exercise_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    
+    -- Lần học (attempt) tương ứng
+    reg_id INT REFERENCES registrations(reg_id),
+    
+    content TEXT NOT NULL,                            -- Bài viết của học viên
+    file_url TEXT,                                    -- File đính kèm (tùy chọn)
+    word_count INT CHECK (word_count >= 0),           -- Số từ (có thể tự động đếm)
+    
+    grade NUMERIC(5,2) CHECK (grade BETWEEN 0 AND 100), -- Điểm chấm (hiển thị riêng)
+    feedback TEXT,                                    -- Nhận xét của giáo viên
+    graded_by INT REFERENCES users(user_id) ON DELETE SET NULL, -- Người chấm
+    
+    status VARCHAR(20) CHECK (
+        status IN ('submitted', 'reviewed', 'resubmitted')
+    ) DEFAULT 'submitted',
+    
+    submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    graded_at TIMESTAMP
+);
+
+-- 9. REGISTRATIONS
+-- =========================================================
+-- 1️⃣ REGISTRATIONS – hỗ trợ học lại khóa (multiple attempts)
+-- =========================================================
+CREATE TABLE registrations (
+    reg_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    course_id INT NOT NULL REFERENCES courses(course_id) ON DELETE CASCADE,
+    payment_id INT REFERENCES payments(payment_id) ON DELETE SET NULL,
+
+    -- Lần học thứ mấy của học viên với khóa này
+    attempt_no INT NOT NULL DEFAULT 1,
+
+    registration_status VARCHAR(20) CHECK (
+        registration_status IN ('pending', 'paid', 'active', 'cancelled', 'completed')
+    ) DEFAULT 'pending',
+
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    activated_at TIMESTAMP,
+    completed_at TIMESTAMP,
+
+    -- Một học viên có thể học lại 1 khóa nhiều lần, nhưng attempt_no phải khác nhau
+    UNIQUE (user_id, course_id, attempt_no)
+);
+
+-- 9.1. STUDY_SHIFTS
+CREATE TABLE study_shifts (
+    shift_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,      -- Ví dụ: 'Ca tối 2-4-6', 'Ca sáng 2-4-6'
+    days_of_week VARCHAR(20) NOT NULL, 
+    -- Ví dụ: '2,4,6' hoặc '3,5,7' (có thể sau này đổi sang JSONB nếu muốn)
+
+    start_time TIME NOT NULL,        -- Giờ bắt đầu trong ngày, ví dụ: '19:00'
+    end_time   TIME NOT NULL,        -- Giờ kết thúc, ví dụ: '20:30'
+
+    description TEXT,
+    is_active BOOLEAN DEFAULT TRUE,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 9.2. CLASS_GROUP_MEMBERS
+-- =========================================================
+-- 2️⃣ CLASS_GROUP_MEMBERS – thêm reg_id để biết thuộc attempt nào
+-- =========================================================
+CREATE TABLE class_group_members (
+    member_id SERIAL PRIMARY KEY,
+    class_group_id INT NOT NULL REFERENCES class_groups(class_group_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+
+    -- Đăng ký (attempt) tương ứng của học viên với course_id của class_group
+    reg_id INT NOT NULL REFERENCES registrations(reg_id),
+
+    joined_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) CHECK (
+        status IN ('enrolled', 'dropped', 'completed')
+    ) DEFAULT 'enrolled',
+
+    UNIQUE (class_group_id, user_id)
+);
+
+-- =========================================================
+-- 3️⃣ CLASS_GROUP_TRANSFERS – log lịch sử chuyển lớp
+-- =========================================================
+CREATE TABLE class_group_transfers (
+    transfer_id SERIAL PRIMARY KEY,
+
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+
+    from_class_group_id INT NOT NULL REFERENCES class_groups(class_group_id) ON DELETE CASCADE,
+    to_class_group_id   INT NOT NULL REFERENCES class_groups(class_group_id) ON DELETE CASCADE,
+
+    from_member_id INT REFERENCES class_group_members(member_id) ON DELETE SET NULL,
+    to_member_id   INT REFERENCES class_group_members(member_id) ON DELETE SET NULL,
+
+    -- Thuộc cùng một registrations (cùng attempt)
+    reg_id INT NOT NULL REFERENCES registrations(reg_id),
+
+    reason TEXT,
+    note TEXT,
+
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 9.3. CLASS_GROUPS
+CREATE TABLE class_groups (
+    class_group_id SERIAL PRIMARY KEY,
+    course_id INT NOT NULL REFERENCES courses(course_id) ON DELETE CASCADE,
+    shift_id INT NOT NULL REFERENCES study_shifts(shift_id) ON DELETE RESTRICT,
+
+    name VARCHAR(200) NOT NULL,        -- Ví dụ: 'Giao tiếp 1 - Khóa 03/2026 - Ca tối 2-4-6'
+    teacher_id INT REFERENCES users(user_id) ON DELETE SET NULL,  -- GV chính
+
+    start_date DATE NOT NULL,          -- Ngày khai giảng của lớp
+    end_date DATE,                     -- Ngày kết thúc dự kiến (có thể tính từ duration_weeks)
+
+    max_students INT DEFAULT 20,       -- Sĩ số tối đa
+	zalo_link TEXT,
+    status VARCHAR(20) CHECK (
+        status IN ('planning', 'open', 'ongoing', 'finished', 'cancelled')
+    ) DEFAULT 'planning',
+
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 11. CLASSES (quản lý cả online & offline)
+CREATE TABLE classes (
+    class_id SERIAL PRIMARY KEY,
+	class_group_id INT REFERENCES class_groups(class_group_id) ON DELETE CASCADE,
+
+	-- Giáo viên đứng lớp trong BUỔI NÀY (có thể khác GV chính trong class_groups)
+    teacher_id INT REFERENCES users(user_id) ON DELETE SET NULL,
+    
+    title VARCHAR(200) NOT NULL,                         -- tên buổi học hoặc kỳ thi
+    description TEXT,
+    
+    class_type VARCHAR(10) CHECK (
+        class_type IN ('online', 'offline')
+    ) NOT NULL DEFAULT 'online',                         -- online = học thêm, offline = thi
+    
+    start_time TIMESTAMP NOT NULL,
+    end_time TIMESTAMP,
+
+	attendance_start_time TIMESTAMP,
+	attendance_end_time   TIMESTAMP,
+    
+    -- ONLINE (học thêm)
+    meeting_link TEXT,                                   -- link lớp học online
+    recording_url TEXT,                                  -- ghi hình buổi học (nếu có)
+    
+    -- OFFLINE (thi cử)
+    location TEXT,                                       -- địa điểm thi
+    exam_type VARCHAR(50) CHECK (
+        exam_type IN ('midterm', 'final', 'makeup', 'other')
+    ),                                                   -- loại kỳ thi (nếu là offline)
+    max_score NUMERIC(5,2) DEFAULT 100,                  -- điểm tối đa cho kỳ thi
+    
+    status VARCHAR(20) CHECK (
+        status IN ('scheduled', 'live', 'completed', 'cancelled')
+    ) DEFAULT 'scheduled',
+    
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    -- ✅ RÀNG BUỘC LOGIC: đảm bảo lớp online không có dữ liệu thi cử
+    CONSTRAINT chk_class_type_validity CHECK (
+        (class_type = 'online' AND exam_type IS NULL AND location IS NULL)
+        OR (class_type = 'offline')
+    )
+);
+
+
+
+-- 11.1. CLASS PARTICIPANTS
+CREATE TABLE class_participants (
+    participant_id SERIAL PRIMARY KEY,
+    class_id INT NOT NULL REFERENCES classes(class_id) ON DELETE CASCADE,
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+    
+    attendance_status VARCHAR(20) CHECK (
+        attendance_status IN ('joined', 'left', 'absent', 'late', 'present')
+    ) DEFAULT 'joined',
+    
+    feedback TEXT,
+    
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (class_id, user_id)
+);
+
+-- 11.3. EXAM SCORES (lưu điểm chi tiết từng kỹ năng)
+CREATE TABLE exam_scores (
+    score_id SERIAL PRIMARY KEY,
+    class_id INT REFERENCES classes(class_id) ON DELETE CASCADE,   -- liên kết với lớp thi (offline)
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,       -- học viên
+    
+    listening_score NUMERIC(5,2) DEFAULT 0,                        -- Điểm nghe
+    speaking_score NUMERIC(5,2) DEFAULT 0,                         -- Điểm nói
+    reading_score NUMERIC(5,2) DEFAULT 0,                          -- Điểm đọc
+    writing_score NUMERIC(5,2) DEFAULT 0,                          -- Điểm viết
+
+    total_score NUMERIC(6,2) DEFAULT 0,                            -- Tổng điểm (do backend tính và lưu)
+    
+    feedback TEXT,                                                 -- Nhận xét giáo viên (nếu có)
+    graded_by INT REFERENCES users(user_id) ON DELETE SET NULL,    -- Người chấm
+    graded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE (class_id, user_id)                                     -- Mỗi học viên chỉ có 1 bản ghi điểm / kỳ thi
+);
+
+-- 10. PROGRESS
+-- =========================================================
+-- 4️⃣ PROGRESS – thêm reg_id để tiến độ gắn với từng lần học
+-- =========================================================
+CREATE TABLE progress (
+    progress_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+
+    -- Lần đăng ký học khóa tương ứng
+    reg_id INT NOT NULL REFERENCES registrations(reg_id),
+
+    progress_percent NUMERIC(5,2) DEFAULT 0 CHECK (progress_percent BETWEEN 0 AND 100),
+    status VARCHAR(20) CHECK (
+        status IN ('not_started', 'in_progress', 'completed')
+    ) DEFAULT 'not_started',
+
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- 10.1 PROGRESS_PROGRESS-DETAILS
+-- =========================================================
+-- 5️⃣ LESSON_PROGRESS_DETAILS – thêm reg_id, unique theo attempt
+-- =========================================================
+CREATE TABLE lesson_progress_details (
+    id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    lesson_id INT REFERENCES lessons(lesson_id) ON DELETE CASCADE,
+
+    -- Lần học (attempt) tương ứng
+    reg_id INT NOT NULL REFERENCES registrations(reg_id),
+
+    content_type VARCHAR(30) CHECK (
+        content_type IN ('vocabulary', 'listening', 'quiz', 'video', 'pdf', 'writing')
+    ),
+    content_id INT,
+
+    progress_percent NUMERIC(5,2) DEFAULT 0 CHECK (progress_percent BETWEEN 0 AND 100),
+
+    status VARCHAR(20) CHECK (
+        status IN ('not_started', 'in_progress', 'completed')
+    ) DEFAULT 'not_started',
+
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Mỗi nội dung trong mỗi bài học, mỗi lần học chỉ có 1 record
+    UNIQUE (user_id, lesson_id, content_type, content_id, reg_id)
+);
+
+-- 1) Thêm UNIQUE cho lesson_progress_details
+ALTER TABLE lesson_progress_details
+  ADD CONSTRAINT uq_lesson_progress_details_user_lesson_content_reg
+  UNIQUE (user_id, lesson_id, content_type, content_id, reg_id);
+
+ -- 2) Thêm UNIQUE cho progress (vì backend dùng ON CONFLICT (user_id, lesson_id, reg_id))
+ALTER TABLE progress
+  ADD CONSTRAINT uq_progress_user_lesson_reg
+  UNIQUE (user_id, lesson_id, reg_id);
+
+
+
+-- 12. CERTIFICATES
+CREATE TABLE certificates (
+    cert_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,
+    issue_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    cert_url TEXT,
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL
+);
+
+-- 13. COURSE REVIEWS
+CREATE TABLE course_reviews (
+    review_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    course_id INT REFERENCES courses(course_id) ON DELETE CASCADE,
+    rating INT CHECK (rating BETWEEN 1 AND 5),
+    comment TEXT,
+    is_visible BOOLEAN DEFAULT TRUE,               -- TRUE = hiển thị, FALSE = bị ẩn
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 14. CHAT
+CREATE TABLE chats (
+    chat_id SERIAL PRIMARY KEY, 
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,  -- Học viên liên quan đến cuộc trò chuyện
+    sender VARCHAR(20) CHECK (sender IN ('student','teacher','ai')) NOT NULL,
+    message TEXT NOT NULL,
+    read_by_student BOOLEAN DEFAULT FALSE,                    -- Học viên đã đọc tin này chưa
+    read_by_teacher BOOLEAN DEFAULT FALSE,                    -- Giáo viên/nhân viên đã đọc tin này chưa
+    read_at TIMESTAMP,                                        -- Thời điểm tin nhắn được đọc
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 15. NOTIFICATIONS
+CREATE TABLE notifications (
+    notification_id SERIAL PRIMARY KEY,
+    sender_id INT REFERENCES users(user_id) ON DELETE SET NULL,        -- Người tạo thông báo
+    title VARCHAR(255) NOT NULL,                                       -- Tiêu đề thông báo
+    message TEXT NOT NULL,                                              -- Nội dung
+    course_id INT REFERENCES courses(course_id) ON DELETE SET NULL,     -- Nếu thông báo thuộc khóa học
+    class_group_id INT REFERENCES class_groups(class_group_id) ON DELETE SET NULL,  -- ✅ MỚI: ID của lớp học
+    target_audience VARCHAR(50) DEFAULT 'user',                         -- 'all', 'course', 'class_group', 'user'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Thêm comment để giải thích
+COMMENT ON TABLE notifications IS 'Bảng lưu thông báo hệ thống';
+COMMENT ON COLUMN notifications.sender_id IS 'ID người tạo thông báo';
+COMMENT ON COLUMN notifications.course_id IS 'ID khóa học (nếu thông báo thuộc khóa học)';
+COMMENT ON COLUMN notifications.class_group_id IS 'ID lớp học (nếu gửi cho một lớp cụ thể, NULL nếu gửi cho cả khóa học)';
+COMMENT ON COLUMN notifications.target_audience IS 'Đối tượng nhận: all (tất cả), course (khóa học), class_group (lớp), user (người dùng cụ thể)';
+
+-- Tạo index để tăng hiệu suất query
+CREATE INDEX idx_notifications_sender_id ON notifications(sender_id);
+CREATE INDEX idx_notifications_course_id ON notifications(course_id);
+CREATE INDEX idx_notifications_class_group_id ON notifications(class_group_id);  -- ✅ MỚI
+CREATE INDEX idx_notifications_target_audience ON notifications(target_audience);
+CREATE INDEX idx_notifications_created_at ON notifications(created_at);
+
+
+-- 16. NOTIFICATION_RECIPIENTS
+CREATE TABLE notification_recipients (
+    recipient_id SERIAL PRIMARY KEY,
+    notification_id INT REFERENCES notifications(notification_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    is_read BOOLEAN DEFAULT FALSE,              -- Đã đọc hay chưa
+    read_at TIMESTAMP,                          -- Thời điểm đọc
+    delivered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Khi gửi thông báo
+);
+
+-- Thêm comment
+COMMENT ON TABLE notification_recipients IS 'Bảng lưu danh sách người nhận thông báo';
+COMMENT ON COLUMN notification_recipients.is_read IS 'Đã đọc hay chưa';
+COMMENT ON COLUMN notification_recipients.read_at IS 'Thời điểm đọc thông báo';
+COMMENT ON COLUMN notification_recipients.delivered_at IS 'Thời điểm gửi thông báo';
+
+-- Tạo index để tăng hiệu suất query
+CREATE INDEX idx_notification_recipients_notification_id ON notification_recipients(notification_id);
+CREATE INDEX idx_notification_recipients_user_id ON notification_recipients(user_id);
+CREATE INDEX idx_notification_recipients_is_read ON notification_recipients(is_read);
+CREATE INDEX idx_notification_recipients_delivered_at ON notification_recipients(delivered_at);
+
+
+CREATE TABLE IF NOT EXISTS push_tokens (
+  id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+  device_token TEXT NOT NULL,
+  platform VARCHAR(20) NOT NULL CHECK (platform IN ('android','ios')),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Helpful indexes for lookups
+CREATE INDEX IF NOT EXISTS idx_push_tokens_user_id ON push_tokens(user_id);
+CREATE INDEX IF NOT EXISTS idx_push_tokens_device_token ON push_tokens(device_token);
+
+
+-- 16. MINIGAMES
+CREATE TABLE minigames (
+    game_id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 17. LEADERBOARD
+CREATE TABLE leaderboard (
+    score_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    game_id INT REFERENCES minigames(game_id) ON DELETE CASCADE,
+    score INT DEFAULT 0,
+    achieved_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 18. SYSTEM SETTINGS
+CREATE TABLE system_settings (
+    setting_id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,
+    value TEXT,
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE payments
+  ADD COLUMN IF NOT EXISTS class_group_id INT REFERENCES class_groups(class_group_id);
+
+DELETE FROM payments;
+DELETE FROM class_group_members;
+DELETE FROM registrations;
+
+-- 19. PAYMENTS
+CREATE TABLE payments (
+    payment_id SERIAL PRIMARY KEY,                                       -- Mã giao dịch nội bộ
+    user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,    -- Người thanh toán (học viên)
+    course_id INT REFERENCES courses(course_id) ON DELETE SET NULL,      -- Khóa học liên quan (có thể NULL)
+    
+    amount NUMERIC(12,2) NOT NULL CHECK (amount >= 0),                   -- Số tiền thanh toán
+    currency VARCHAR(10) DEFAULT 'VND',                                  -- Đơn vị tiền tệ
+
+    payment_method VARCHAR(50) NOT NULL CHECK (                          -- Phương thức thanh toán
+        payment_method IN ('credit_card', 'momo', 'zalopay', 'bank_transfer', 'vnpay', 'cash')
+    ),
+
+    payment_status VARCHAR(20) DEFAULT 'pending' CHECK (                 -- Trạng thái thanh toán
+        payment_status IN ('pending', 'processing', 'completed', 'failed', 'refunded')
+    ),
+
+    transaction_id VARCHAR(100) UNIQUE,                                  -- Mã giao dịch nội bộ hoặc từ cổng
+    gateway_transaction_code VARCHAR(100),                               -- Mã trả về từ cổng (VD: VNPAY TransactionNo)
+    order_code VARCHAR(100) UNIQUE,                                      -- Mã đơn hàng gửi sang cổng thanh toán
+    bank_code VARCHAR(50),                                               -- Mã ngân hàng
+    card_type VARCHAR(50),                                               -- Loại thẻ (ATM, VISA,…)
+    payment_url TEXT,                                                    -- URL thanh toán (nếu online)
+    payment_note TEXT,                                                   -- Ghi chú nội bộ
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                      -- Thời điểm tạo
+    paid_at TIMESTAMP,                                                   -- Khi thanh toán thành công
+    refund_at TIMESTAMP,                                                 -- Khi hoàn tiền
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,                      -- Cập nhật cuối
+
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL          -- Nhân viên/sales tạo giao dịch
+);
+
+-- 20. POSTS
+CREATE TABLE posts (
+    post_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    media_url TEXT,  -- hình ảnh hoặc video đính kèm
+    media_type VARCHAR(20) CHECK (media_type IN ('image', 'video')),
+    category VARCHAR(50),  -- ví dụ: 'announcement', 'discussion', 'question'
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) CHECK (status IN ('active', 'hidden', 'deleted')) DEFAULT 'active'
+);
+
+-- 20.1 COMMENTS
+CREATE TABLE comments (
+    comment_id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES posts(post_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    parent_id INT REFERENCES comments(comment_id) ON DELETE CASCADE,  -- trả lời bình luận khác
+    content TEXT NOT NULL,
+    media_url TEXT,  -- hình ảnh hoặc video đính kèm
+    media_type VARCHAR(20) CHECK (media_type IN ('image', 'video')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    status VARCHAR(20) CHECK (status IN ('active', 'hidden', 'deleted')) DEFAULT 'active'
+);
+
+-- 20.2 POST_REACTIONS
+CREATE TABLE post_reactions (
+    reaction_id SERIAL PRIMARY KEY,
+    post_id INT REFERENCES posts(post_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    reaction_type VARCHAR(10) CHECK (reaction_type IN ('like', 'dislike')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (post_id, user_id)
+);
+
+
+-- 20.3 COMMENT_REACTIONS
+CREATE TABLE comment_reactions (
+    reaction_id SERIAL PRIMARY KEY,
+    comment_id INT REFERENCES comments(comment_id) ON DELETE CASCADE,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    reaction_type VARCHAR(10) CHECK (reaction_type IN ('like', 'dislike')),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (comment_id, user_id)
+);
+
+-- 21. ACTIVITY LOGS
+CREATE TABLE activity_logs (
+    log_id SERIAL PRIMARY KEY,
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    action VARCHAR(100),
+    details JSONB,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 22. APP_UTILITIES
+CREATE TABLE app_utilities (
+    utility_id SERIAL PRIMARY KEY,
+    key VARCHAR(100) UNIQUE NOT NULL,         -- mã định danh, ví dụ: 'dictionary', 'progress_tracker', 'ai_chat'
+    name VARCHAR(100) NOT NULL,               -- tên hiển thị, ví dụ: 'Từ điển', 'AI Chat', 'Lịch học'
+    description TEXT,                         -- mô tả ngắn về tiện ích
+    icon_url TEXT,                            -- đường dẫn biểu tượng hiển thị trong app
+    route_path VARCHAR(200),                  -- đường dẫn màn hình trong app (ví dụ: '/dictionary')
+    is_active BOOLEAN DEFAULT TRUE,           -- bật / tắt hiển thị tiện ích trong app
+    
+    category VARCHAR(50),                     -- nhóm tiện ích: 'learning', 'communication', 'fun', 'system', ...
+    display_order INT DEFAULT 0,              -- thứ tự hiển thị
+    
+    created_by INT REFERENCES users(user_id) ON DELETE SET NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 22.1. USER_UTILITIES
+CREATE TABLE user_utilities (
+    user_id INT REFERENCES users(user_id) ON DELETE CASCADE,
+    utility_id INT REFERENCES app_utilities(utility_id) ON DELETE CASCADE,
+    
+    is_enabled BOOLEAN DEFAULT TRUE,               -- người dùng có bật tiện ích không
+    pinned BOOLEAN DEFAULT FALSE,                  -- người dùng có ghim tiện ích lên trang chính không
+    customized_label VARCHAR(100),                 -- tên tùy chỉnh (nếu cho phép)
+    
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_id, utility_id)
+);
+
+-- 23. SERVICE_FEEDBACK (Góp ý đơn giản)
+CREATE TABLE service_feedback (
+    feedback_id SERIAL PRIMARY KEY,
+
+    user_id INT REFERENCES users(user_id) ON DELETE SET NULL,   -- Người gửi (nếu có)
+
+    title VARCHAR(255) NOT NULL,        -- Tiêu đề góp ý
+    content TEXT NOT NULL,              -- Nội dung chi tiết
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+INSERT INTO users (full_name, email, password_hash, language_pref, status, phone, address, date_of_birth)
+VALUES
+('Trần Minh Nghĩa', 'tranminhnghia4600@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456789', 'Hà Nội', '1990-01-01'),
+('Nghĩa 3008', 'nghia3008aaa@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456790', 'TP.HCM', '1985-05-15'),
+('TM Nghĩa', 'tmnghia4600@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456791', 'Đà Nẵng', '1988-08-20'),
+('Nghĩa Phạm', 'nghiapha1234@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456792', 'Cần Thơ', '1992-12-10'),
+('Nguyễn Văn A', 'nguyenvana@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456793', 'Hải Phòng', '1995-03-15'),
+('Trần Thị B', 'tranthib@gmail.com', '$2b$10$uPQtaNXYb3kSkEKGL7GoRe.69Vf1jTnYHF4v7tql6Me1.XHJQ/OLC', 'vi', 'active', '0123456794', 'Huế', '1993-07-22');
+
+-- ========================================================
+-- 2️⃣ ROLES
+-- ========================================================
+INSERT INTO roles (role_name, display_name, description)
+VALUES
+('system_admin', 'Quản trị viên hệ thống', 'Quản lý toàn bộ nền tảng, phân quyền, cấu hình hệ thống, giám sát hoạt động'),
+('academic_manager', 'Trưởng bộ phận học vụ', 'Quản lý học thuật, khóa học, lớp học, giáo viên, nội dung giảng dạy'),
+('sales_staff', 'Nhân viên tư vấn khách hàng', 'Ghi danh học viên, thanh toán, hỗ trợ hành chính'),
+('teacher', 'Giáo viên', 'Soạn bài, giảng dạy, chấm thi, theo dõi học viên'),
+('student', 'Học viên', 'Người học trong hệ thống (mobile app)');
+
+-- ========================================================
+-- 3️⃣ PERMISSIONS
+-- ========================================================
+INSERT INTO permissions (perm_key, module, description)
+VALUES
+-- USERS & ROLES
+('user.manage', 'users', 'Quản lý người dùng'),
+('role.manage', 'roles', 'Quản lý vai trò'),
+('permission.manage', 'permissions', 'Quản lý quyền'),
+
+
+-- COURSES & LESSONS
+('course.manage', 'courses', 'Quản lý khóa học'),
+('course.manage.teacher', 'courses', 'Quản lý khóa học'),
+
+-- LESSONS
+('lesson.manage', 'lessons', 'Quản lý bài học & nội dung (lession_media, từ vựng, nghe, phát âm, quiz, writing)'),
+('lesson.manage.teacher', 'lessons', 'Quản lý bài học & nội dung (lession_media, từ vựng, nghe, phát âm, quiz, writing)'),
+
+-- CLASSES
+('class.manage', 'classes', 'Quản lý / lập lịch lớp học'),
+('class.manage.teacher', 'classes', 'Giảng dạy và chấm điểm trong lớp'),
+
+-- PROGRESS & ANALYTICS
+('progress.view', 'progress', 'Xem tiến độ toàn hệ thống'),
+('`progress.view.teacher`', 'progress', 'Xem tiến độ theo khóa / giáo viên'),
+('progress.view.sales_staff', 'progress', 'Xem tiến độ theo khóa / giáo viên'),
+
+-- REGISTRATIONS
+('registration.manage.sales_staff', 'registrations', 'Quản lý đăng ký khóa học'),
+
+-- PAYMENTS
+('payment.manage.sales_staff', 'payments', 'Quản lý thanh toán và thống kê'),
+
+-- CERTIFICATES
+('certificate.manage', 'certificates', 'Quản lý và duyệt cấp chứng chỉ'),
+
+-- REVIEWS
+('review.manage', 'reviews', 'Quản lý đánh giá khóa học'),
+
+-- NOTIFICATIONS
+('notification.manage', 'notifications', 'Gửi thông báo học viên / lớp'),
+('notification.manage.teacher', 'notifications', 'Gửi thông báo học viên của khóa học'),
+
+-- CHAT
+('chat.manage', 'chat', 'Theo dõi và quản lý chat'),
+
+-- MINIGAMES
+('minigame.manage', 'minigames', 'Quản lý minigame và leaderboard'),
+
+-- SYSTEM SETTINGS
+('system.config', 'system', 'Cấu hình hệ thống'),
+
+-- APP UTILITIES
+('utilities.manage', 'utilities', 'Quản lý & cấu hình tiện ích học tập'),
+
+-- ACTIVITY LOGS
+('activity.manage', 'activity_logs', 'Theo dõi nhật ký hoạt động'),
+
+-- POSTS
+('posts.manage', 'posts', 'Quản lý bài viết');
+
+-- ========================================================
+-- 4️⃣ ROLE-PERMISSION MAPPING
+-- ========================================================
+
+-- SYSTEM ADMIN - tất cả quyền
+INSERT INTO role_permissions (role_id, perm_id)
+SELECT r.role_id, p.perm_id
+FROM roles r, permissions p
+WHERE r.role_name = 'system_admin'
+AND p.perm_key IN (
+    'user.manage', 'role.manage', 'permission.manage', 'course.manage',
+    'lesson.manage', 'class.manage', 'progress.view', 'registration.manage.sales_staff', 'payment.manage.sales_staff',
+    'certificate.manage', 'review.manage', 'notification.manage', 'chat.manage',
+    'minigame.manage', 'system.config', 'utilities.manage', 'activity.manage',
+    'posts.manage'
+);
+
+-- ACADEMIC MANAGER
+INSERT INTO role_permissions (role_id, perm_id)
+SELECT r.role_id, p.perm_id
+FROM roles r, permissions p
+WHERE r.role_name = 'academic_manager'
+AND p.perm_key IN (
+    'course.manage', 'lesson.manage', 'class.manage','progress.view',
+    'certificate.manage', 'review.manage', 'notification.manage',
+    'chat.manage', 'system.config', 'activity.manage',
+    'posts.manage'
+);
+
+-- SALES STAFF
+INSERT INTO role_permissions (role_id, perm_id)
+SELECT r.role_id, p.perm_id
+FROM roles r, permissions p
+WHERE r.role_name = 'sales_staff'
+AND p.perm_key IN (
+    'progress.view.sales_staff', 'registration.manage.sales_staff',
+    'payment.manage.sales_staff', 'notification.manage', 'chat.manage'
+);
+
+-- TEACHER
+INSERT INTO role_permissions (role_id, perm_id)
+SELECT r.role_id, p.perm_id
+FROM roles r, permissions p
+WHERE r.role_name = 'teacher'
+AND p.perm_key IN (
+    'course.manage.teacher', 'lesson.manage.teacher', 'class.manage.teacher',
+    'progress.view.teacher', 'notification.manage.teacher'
+);
+
+-- ========================================================
+-- 5️⃣ USER-ROLE MAPPING (Lấy ID tự động theo email & role_name)
+-- ========================================================
+INSERT INTO user_roles (user_id, role_id)
+SELECT u.user_id, r.role_id
+FROM users u, roles r
+WHERE (u.email, r.role_name) IN (
+    ('tranminhnghia4600@gmail.com', 'system_admin'),
+    ('nghia3008aaa@gmail.com', 'academic_manager'),
+    ('tmnghia4600@gmail.com', 'sales_staff'),
+    ('nghiapha1234@gmail.com', 'teacher'),
+    ('nguyenvana@gmail.com', 'student'),
+    ('tranthib@gmail.com', 'student')
+);

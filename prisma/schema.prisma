@@ -1,0 +1,819 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model users {
+  user_id             Int                   @id @default(autoincrement())
+  full_name           String                @db.VarChar(100)
+  email               String                @unique @db.VarChar(100)
+  password_hash       String
+  language_pref       String?               @default("vi") @db.VarChar(10)
+  avatar_url          String?
+  phone               String?               @db.VarChar(20)
+  address             String?
+  date_of_birth       DateTime?             @db.Date
+  status              String?               @default("active") @db.VarChar(20)
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  updated_at          DateTime?             @default(now()) @db.Timestamp(6)
+  activity_logs       activity_logs[]
+  certificates        certificates[]
+  chats               chats[]
+  class_participants  class_participants[]
+  comments            comments[]
+  course_reviews      course_reviews[]
+  course_teachers     course_teachers[]
+  exam_scores         exam_scores[]
+  leaderboard         leaderboard[]
+  notification_recipients notification_recipients[] @relation("NotificationRecipient")
+  notifications_sent      notifications[]           @relation("NotificationSender")
+  push_tokens        push_tokens[]
+  payments            payments[]
+  posts               posts[]
+  progress            progress[]
+  registrations       registrations[]
+  user_roles          user_roles[]
+  writing_submissions writing_submissions[]
+  approved_lessons    lessons[]                  @relation("LessonApprover")
+  system_settings_created system_settings[]      @relation("SystemSettingCreator")
+  courses_taught      courses[]                  @relation("CourseTeacher")
+  class_groups_taught class_groups[]             @relation("ClassGroupTeacher")
+  class_groups_created class_groups[]            @relation("ClassGroupCreator")
+  class_group_memberships class_group_members[]
+  lesson_progress_details lesson_progress_details[]
+  quiz_attempt_sets quiz_attempt_sets[]
+  quiz_attempts quiz_attempts[]
+  listening_attempt_sets listening_attempt_sets[]
+  listening_answers listening_answers[]
+
+  @@map("users")
+}
+
+model push_tokens {
+  id           Int       @id @default(autoincrement())
+  user_id      Int
+  device_token String
+  platform     String    @db.VarChar(20)
+  is_active    Boolean?  @default(true)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  user         users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@index([user_id], map: "idx_push_tokens_user_id")
+  @@index([device_token], map: "idx_push_tokens_device_token")
+  @@map("push_tokens")
+}
+
+model roles {
+  role_id          Int                @id @default(autoincrement())
+  role_name        String             @unique @db.VarChar(50)
+  display_name     String?            @db.VarChar(100)
+  description      String?
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  role_permissions role_permissions[]
+  user_roles       user_roles[]
+
+  @@map("roles")
+}
+
+model user_roles {
+  user_id     Int
+  role_id     Int
+  assigned_at DateTime? @default(now()) @db.Timestamp(6)
+  roles       roles     @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+  users       users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@id([user_id, role_id])
+  @@map("user_roles")
+}
+
+model permissions {
+  perm_id          Int                @id @default(autoincrement())
+  perm_key         String             @unique @db.VarChar(100)
+  module           String?            @db.VarChar(50)
+  description      String?
+  created_at       DateTime?          @default(now()) @db.Timestamp(6)
+  role_permissions role_permissions[]
+
+  @@map("permissions")
+}
+
+model role_permissions {
+  role_id     Int
+  perm_id     Int
+  permissions permissions @relation(fields: [perm_id], references: [perm_id], onDelete: Cascade)
+  roles       roles       @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+
+  @@id([role_id, perm_id])
+  @@map("role_permissions")
+}
+
+model courses {
+  course_id                   Int                    @id @default(autoincrement())
+  title                       String                 @db.VarChar(200)
+  description                 String?
+  image_url                   String?
+  price                       Decimal?               @default(0) @db.Decimal(10, 2)
+  level                       String?                @default("beginner") @db.VarChar(50)
+  duration_weeks              Int?                   @default(4)
+  language                    String?                @default("en") @db.VarChar(10)
+  status                      String?                @default("active") @db.VarChar(20)
+  teacher_id                  Int?
+  created_by                  Int?
+  created_at                  DateTime?              @default(now()) @db.Timestamp(6)
+  updated_at                  DateTime?              @default(now()) @db.Timestamp(6)
+  certificates                certificates[]
+  course_prerequisites        course_prerequisites[]
+  course_prerequisites_prereq course_prerequisites[] @relation("CoursePrerequisites")
+  course_reviews              course_reviews[]
+  course_teachers             course_teachers[]
+  lessons                     lessons[]
+  notifications               notifications[]
+  payments                    payments[]
+  progress                    progress[]
+  registrations               registrations[]
+  teacher                     users?                 @relation("CourseTeacher", fields: [teacher_id], references: [user_id], onDelete: SetNull)
+  class_groups                class_groups[]
+
+  @@map("courses")
+}
+
+model course_prerequisites {
+  id               Int      @id @default(autoincrement())
+  course_id        Int?
+  prereq_course_id Int?
+  courses          courses? @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  prereq_courses   courses? @relation("CoursePrerequisites", fields: [prereq_course_id], references: [course_id], onDelete: Cascade)
+
+  @@unique([course_id, prereq_course_id])
+  @@map("course_prerequisites")
+}
+
+model course_reviews {
+  review_id  Int       @id @default(autoincrement())
+  user_id    Int?
+  course_id  Int?
+  rating     Int?
+  comment    String?
+  is_visible Boolean?  @default(true)
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  courses    courses?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  users      users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("course_reviews")
+}
+
+model course_teachers {
+  id             Int       @id @default(autoincrement())
+  course_id      Int?
+  teacher_id     Int?
+  role_in_course String?   @default("instructor") @db.VarChar(50)
+  assigned_at    DateTime? @default(now()) @db.Timestamp(6)
+  courses        courses?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  users          users?    @relation(fields: [teacher_id], references: [user_id], onDelete: Cascade)
+
+  @@unique([course_id, teacher_id])
+  @@map("course_teachers")
+}
+
+model lessons {
+  lesson_id               Int                       @id @default(autoincrement())
+  course_id               Int?
+  title                   String                    @db.VarChar(200)
+  content                 String?
+  order_index             Int?                      @default(0)
+  approval_status         String?                   @default("pending") @db.VarChar(20)
+  approved_by             Int?
+  approved_at             DateTime?                 @db.Timestamp(6)
+  review_note             String?
+  created_by              Int?
+  created_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  updated_at              DateTime?                 @default(now()) @db.Timestamp(6)
+  lesson_media            lesson_media[]
+  courses                 courses?                  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  listening_exercises     listening_exercises[]
+  progress                progress[]
+  vocabularies            vocabularies[]
+  writing_exercises       writing_exercises[]
+  approver                users?                   @relation("LessonApprover", fields: [approved_by], references: [user_id], onDelete: SetNull)
+  quizzes                 quizzes[]
+  lesson_progress_details lesson_progress_details[]
+  quiz_attempt_sets quiz_attempt_sets[]
+
+  @@map("lessons")
+}
+
+model lesson_media {
+  media_id         Int       @id @default(autoincrement())
+  lesson_id        Int?
+  media_type       String?   @db.VarChar(50)
+  media_url        String
+  duration_seconds Int?
+  total_pages      Int?
+  created_by       Int?
+  created_at       DateTime? @default(now()) @db.Timestamp(6)
+  lessons          lessons?  @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+
+  @@map("lesson_media")
+}
+
+model vocabularies {
+  vocab_id       Int       @id @default(autoincrement())
+  lesson_id      Int?
+  word           String    @db.VarChar(100)
+  phonetic       String?   @db.VarChar(100)
+  meaning        String?
+  example        String?
+  audio_url      String?
+  image_url      String?
+  part_of_speech String?   @db.VarChar(20)
+  created_by     Int?
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  lessons        lessons?  @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+
+  @@map("vocabularies")
+}
+
+model listening_exercises {
+  exercise_id         Int                   @id @default(autoincrement())
+  lesson_id           Int?
+  title               String?               @db.VarChar(200)
+  audio_url           String
+  transcript          String?
+  created_by          Int?
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  lessons             lessons?              @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  listening_questions listening_questions[]
+  listening_attempt_sets listening_attempt_sets[]
+
+  @@map("listening_exercises")
+}
+
+model listening_questions {
+  question_id         Int                  @id @default(autoincrement())
+  exercise_id         Int?
+  question_type       String?              @default("multiple_choice") @db.VarChar(20)
+  question            String
+  options             Json
+  correct_answer      Json
+  order_index         Int?                 @default(0)
+  created_at          DateTime?            @default(now()) @db.Timestamp(6)
+  listening_exercises listening_exercises? @relation(fields: [exercise_id], references: [exercise_id], onDelete: Cascade)
+  listening_answers listening_answers[]
+
+  @@map("listening_questions")
+}
+
+model quizzes {
+  quiz_id        Int       @id @default(autoincrement())
+  lesson_id      Int?
+  question       String
+  question_type  String?   @default("multiple_choice") @db.VarChar(30)
+  explanation    String?
+  options        Json?     @default("[]")
+  correct_answer Json?     @default("[]")
+  order_index    Int?      @default(0)
+  created_by     Int?
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  lessons        lessons?  @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  quiz_attempts quiz_attempts[]
+
+  @@map("quizzes")
+}
+
+model writing_exercises {
+  exercise_id         Int                   @id @default(autoincrement())
+  lesson_id           Int?
+  title               String?               @db.VarChar(200)
+  prompt              String
+  sample_answer       String?
+  word_limit          Int?
+  order_index         Int?                  @default(0)
+  created_by          Int?
+  created_at          DateTime?             @default(now()) @db.Timestamp(6)
+  lessons             lessons?              @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  writing_submissions writing_submissions[]
+
+  @@map("writing_exercises")
+}
+
+model writing_submissions {
+  submission_id     Int                @id @default(autoincrement())
+  exercise_id       Int?
+  user_id           Int?
+  /// Lần học (attempt) tương ứng (registrations.reg_id)
+  reg_id            Int?
+  content           String
+  file_url          String?
+  word_count        Int?
+  grade             Decimal?           @db.Decimal(5, 2)
+  feedback          String?
+  graded_by         Int?
+  status            String?            @default("submitted") @db.VarChar(20)
+  submitted_at      DateTime?          @default(now()) @db.Timestamp(6)
+  graded_at         DateTime?
+  writing_exercises writing_exercises? @relation(fields: [exercise_id], references: [exercise_id], onDelete: Cascade)
+  users             users?             @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  registrations     registrations?     @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  @@map("writing_submissions")
+}
+
+model payments {
+  payment_id              Int             @id @default(autoincrement())
+  user_id                 Int
+  course_id               Int?
+  amount                  Decimal         @db.Decimal(12, 2)
+  currency                String?         @default("VND") @db.VarChar(10)
+  payment_method          String          @db.VarChar(50)
+  payment_status          String?         @default("pending") @db.VarChar(20)
+  transaction_id          String?         @unique @db.VarChar(100)
+  gateway_transaction_code String?        @db.VarChar(100)
+  order_code              String?         @unique @db.VarChar(100)
+  bank_code               String?         @db.VarChar(50)
+  card_type               String?         @db.VarChar(50)
+  payment_url             String?
+  payment_note            String?
+  created_by              Int?
+  created_at              DateTime?       @default(now()) @db.Timestamp(6)
+  paid_at                 DateTime?       @db.Timestamp(6)
+  refund_at               DateTime?       @db.Timestamp(6)
+  updated_at              DateTime?       @default(now()) @db.Timestamp(6)
+  courses                 courses?        @relation(fields: [course_id], references: [course_id], onDelete: SetNull)
+  users                   users?          @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  registrations           registrations[]
+
+  @@map("payments")
+}
+
+model progress {
+  progress_id      Int       @id @default(autoincrement())
+  user_id          Int?
+  lesson_id        Int?
+  /// Lần đăng ký học khóa tương ứng (registrations.reg_id)
+  reg_id           Int?
+  progress_percent Decimal?  @default(0) @db.Decimal(5, 2)
+  status           String?   @default("not_started") @db.VarChar(20)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+  course_id        Int?
+  courses          courses?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  lessons          lessons?  @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  users            users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  registrations    registrations? @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  /// Đảm bảo 1 bản ghi tiến độ cho mỗi (user, lesson, reg_id)
+  @@unique([user_id, lesson_id, reg_id], map: "uq_progress_user_lesson_reg")
+  @@map("progress")
+}
+
+model lesson_progress_details {
+  id               Int       @id @default(autoincrement())
+  user_id          Int
+  lesson_id        Int
+  /// Lần học (attempt) tương ứng - gắn với registrations.reg_id
+  reg_id           Int
+  content_type     String    @db.VarChar(30)
+  content_id       Int?
+  progress_percent Decimal?  @default(0) @db.Decimal(5, 2)
+  status           String?   @default("not_started") @db.VarChar(20)
+  updated_at       DateTime? @default(now()) @db.Timestamp(6)
+
+  lessons lessons? @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  users   users?   @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  registrations registrations @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  /// Mỗi nội dung trong mỗi bài học, mỗi lần học chỉ có 1 record
+  @@unique([user_id, lesson_id, content_type, content_id, reg_id], map: "uq_lesson_progress_details_user_lesson_content_reg")
+  @@map("lesson_progress_details")
+}
+
+model listening_attempt_sets {
+  attempt_set_id    Int       @id @default(autoincrement())
+  user_id           Int
+  exercise_id       Int
+  /// Lần học (attempt) tương ứng (registrations.reg_id)
+  reg_id            Int?
+  correct_count     Int?      @default(0)
+  total_questions   Int?      @default(0)
+  accuracy_percent  Decimal?  @default(0) @db.Decimal(5, 2)
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+
+  users               users?               @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  listening_exercises listening_exercises? @relation(fields: [exercise_id], references: [exercise_id], onDelete: Cascade)
+  listening_answers   listening_answers[]
+  registrations       registrations?       @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  @@map("listening_attempt_sets")
+}
+
+model listening_answers {
+  answer_id     Int       @id @default(autoincrement())
+  user_id       Int
+  question_id   Int
+  attempt_set_id Int
+  user_answer   Json?
+  is_correct    Boolean?
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  users users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  listening_questions listening_questions? @relation(fields: [question_id], references: [question_id], onDelete: Cascade)
+  listening_attempt_sets listening_attempt_sets? @relation(fields: [attempt_set_id], references: [attempt_set_id], onDelete: Cascade)
+
+  @@map("listening_answers")
+}
+
+model quiz_attempt_sets {
+  attempt_set_id  Int       @id @default(autoincrement())
+  user_id         Int
+  lesson_id       Int
+  /// Lần học (attempt) tương ứng (registrations.reg_id)
+  reg_id          Int?
+  average_score   Decimal?  @default(0) @db.Decimal(5, 2)
+  total_questions Int?      @default(0)
+  correct_count   Int?      @default(0)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+
+  users          users?          @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  lessons        lessons?        @relation(fields: [lesson_id], references: [lesson_id], onDelete: Cascade)
+  quiz_attempts  quiz_attempts[]
+  registrations  registrations?  @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  @@map("quiz_attempt_sets")
+}
+
+model quiz_attempts {
+  attempt_id     Int       @id @default(autoincrement())
+  user_id        Int
+  quiz_id        Int
+  attempt_set_id Int
+  is_correct     Boolean?
+  user_answer    Json?
+  score_percent  Decimal?  @db.Decimal(5, 2)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+
+  users users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  quizzes quizzes? @relation(fields: [quiz_id], references: [quiz_id], onDelete: Cascade)
+  quiz_attempt_sets quiz_attempt_sets? @relation(fields: [attempt_set_id], references: [attempt_set_id], onDelete: Cascade)
+
+  @@map("quiz_attempts")
+}
+
+model classes {
+  class_id           Int                  @id @default(autoincrement())
+  class_group_id     Int
+  teacher_id         Int?
+  title              String               @db.VarChar(200)
+  description        String?
+  class_type         String               @default("online") @db.VarChar(10)
+  start_time         DateTime             @db.Timestamp(6)
+  end_time           DateTime?            @db.Timestamp(6)
+  attendance_start_time DateTime?         @db.Timestamp(6)
+  attendance_end_time   DateTime?         @db.Timestamp(6)
+  meeting_link       String?
+  recording_url      String?
+  location           String?
+  exam_type          String?              @db.VarChar(50)
+  max_score          Decimal?             @default(100) @db.Decimal(5, 2)
+  status             String?              @default("scheduled") @db.VarChar(20)
+  created_by         Int?
+  created_at         DateTime?            @default(now()) @db.Timestamp(6)
+  updated_at         DateTime?            @default(now()) @db.Timestamp(6)
+  class_participants class_participants[]
+  exam_scores        exam_scores[]
+  class_group        class_groups         @relation(fields: [class_group_id], references: [class_group_id], onDelete: Cascade)
+
+  @@map("classes")
+}
+
+model class_participants {
+  participant_id    Int       @id @default(autoincrement())
+  class_id          Int?
+  user_id           Int
+  attendance_status String?   @default("joined") @db.VarChar(20)
+  feedback          String?
+  created_at        DateTime? @default(now()) @db.Timestamp(6)
+  classes           classes?  @relation(fields: [class_id], references: [class_id], onDelete: Cascade)
+  users             users     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@unique([class_id, user_id])
+  @@map("class_participants")
+}
+
+model study_shifts {
+  shift_id     Int       @id @default(autoincrement())
+  name         String    @db.VarChar(100)
+  days_of_week String    @db.VarChar(20)
+  start_time   DateTime  @db.Time(6)
+  end_time     DateTime  @db.Time(6)
+  description  String?
+  is_active    Boolean?  @default(true)
+  created_at   DateTime? @default(now()) @db.Timestamp(6)
+  updated_at   DateTime? @default(now()) @db.Timestamp(6)
+  class_groups class_groups[]
+
+  @@map("study_shifts")
+}
+
+model class_groups {
+  class_group_id Int       @id @default(autoincrement())
+  course_id      Int
+  shift_id       Int
+  name           String    @db.VarChar(200)
+  teacher_id     Int?
+  start_date     DateTime  @db.Date
+  end_date       DateTime? @db.Date
+  max_students   Int?      @default(20)
+  zalo_link      String?
+  status         String?   @default("planning") @db.VarChar(20)
+  created_by     Int?
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  course         courses   @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  shift          study_shifts @relation(fields: [shift_id], references: [shift_id], onDelete: Restrict)
+  teacher        users?    @relation("ClassGroupTeacher", fields: [teacher_id], references: [user_id], onDelete: SetNull)
+  creator        users?    @relation("ClassGroupCreator", fields: [created_by], references: [user_id], onDelete: SetNull)
+  members        class_group_members[]
+  classes        classes[]
+  notifications  notifications[] @relation("NotificationClassGroup")
+
+  @@map("class_groups")
+}
+
+model class_group_members {
+  member_id      Int       @id @default(autoincrement())
+  class_group_id Int
+  user_id        Int
+  /// Đăng ký (attempt) tương ứng của học viên với course_id của class_group
+  /// Gắn với bảng registrations.reg_id để biết thuộc lần học nào
+  reg_id         Int?
+  joined_at      DateTime? @default(now()) @db.Timestamp(6)
+  status         String?   @default("enrolled") @db.VarChar(20)
+  class_group    class_groups @relation(fields: [class_group_id], references: [class_group_id], onDelete: Cascade)
+  user           users        @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  registration   registrations? @relation(fields: [reg_id], references: [reg_id], onDelete: Cascade)
+
+  @@unique([class_group_id, user_id])
+  @@map("class_group_members")
+}
+
+model exam_scores {
+  score_id        Int       @id @default(autoincrement())
+  class_id        Int?
+  user_id         Int?
+  listening_score Decimal?  @default(0) @db.Decimal(5, 2)
+  speaking_score  Decimal?  @default(0) @db.Decimal(5, 2)
+  reading_score   Decimal?  @default(0) @db.Decimal(5, 2)
+  writing_score   Decimal?  @default(0) @db.Decimal(5, 2)
+  total_score     Decimal?  @default(0) @db.Decimal(6, 2)
+  feedback        String?
+  graded_by       Int?
+  graded_at       DateTime? @default(now()) @db.Timestamp(6)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  classes         classes?  @relation(fields: [class_id], references: [class_id], onDelete: Cascade)
+  users           users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@unique([class_id, user_id])
+  @@map("exam_scores")
+}
+
+model certificates {
+  cert_id    Int       @id @default(autoincrement())
+  user_id    Int?
+  course_id  Int?
+  issue_date DateTime? @default(now()) @db.Timestamp(6)
+  cert_url   String?
+  created_by Int?
+  courses    courses?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  users      users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("certificates")
+}
+
+model chats {
+  chat_id          Int       @id @default(autoincrement())
+  user_id          Int?
+  sender           String    @db.VarChar(20)
+  message          String
+  read_by_student  Boolean?  @default(false)
+  read_by_teacher  Boolean?  @default(false)
+  read_at          DateTime? @db.Timestamp(6)
+  created_at      DateTime? @default(now()) @db.Timestamp(6)
+  users            users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("chats")
+}
+
+model comments {
+  comment_id        Int                 @id @default(autoincrement())
+  post_id           Int?
+  user_id           Int?
+  parent_id         Int?
+  content           String?
+  media_url         String?
+  media_type        String?             @db.VarChar(20)
+  created_at        DateTime?           @default(now()) @db.Timestamp(6)
+  updated_at        DateTime?           @default(now()) @db.Timestamp(6)
+  status            String?             @default("active") @db.VarChar(20)
+  comment_reactions comment_reactions[]
+  posts             posts?              @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+  users             users?              @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("comments")
+}
+
+model comment_reactions {
+  reaction_id   Int       @id @default(autoincrement())
+  comment_id    Int?
+  user_id       Int?
+  reaction_type String?   @db.VarChar(10)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  comments      comments? @relation(fields: [comment_id], references: [comment_id], onDelete: Cascade)
+
+  @@unique([comment_id, user_id])
+  @@map("comment_reactions")
+}
+
+model posts {
+  post_id        Int              @id @default(autoincrement())
+  user_id        Int?
+  title          String           @db.VarChar(255)
+  content        String
+  media_url      String?
+  media_type     String?          @db.VarChar(20)
+  category       String?          @db.VarChar(50)
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(6)
+  status         String?          @default("active") @db.VarChar(20)
+  comments       comments[]
+  post_reactions post_reactions[]
+  users          users?           @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("posts")
+}
+
+model post_reactions {
+  reaction_id   Int       @id @default(autoincrement())
+  post_id       Int?
+  user_id       Int?
+  reaction_type String?   @db.VarChar(10)
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+  posts         posts?    @relation(fields: [post_id], references: [post_id], onDelete: Cascade)
+
+  @@unique([post_id, user_id])
+  @@map("post_reactions")
+}
+
+model notifications {
+  notification_id Int       @id @default(autoincrement())
+  sender_id      Int?
+  title           String    @db.VarChar(255)
+  message        String
+  course_id      Int?
+  class_group_id Int?
+  target_audience String?   @default("user") @db.VarChar(50)
+  created_at     DateTime? @default(now()) @db.Timestamp(6)
+  updated_at     DateTime? @default(now()) @db.Timestamp(6)
+  courses        courses?  @relation(fields: [course_id], references: [course_id], onDelete: SetNull)
+  class_groups   class_groups? @relation("NotificationClassGroup", fields: [class_group_id], references: [class_group_id], onDelete: SetNull)
+  sender         users?    @relation("NotificationSender", fields: [sender_id], references: [user_id], onDelete: SetNull)
+  notification_recipients notification_recipients[]
+
+  @@map("notifications")
+}
+
+model notification_recipients {
+  recipient_id    Int       @id @default(autoincrement())
+  notification_id Int
+  user_id         Int
+  is_read         Boolean?  @default(false)
+  read_at         DateTime? @db.Timestamp(6)
+  delivered_at    DateTime? @default(now()) @db.Timestamp(6)
+  notifications   notifications @relation(fields: [notification_id], references: [notification_id], onDelete: Cascade)
+  users           users?    @relation("NotificationRecipient", fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("notification_recipients")
+}
+
+model minigames {
+  game_id     Int           @id @default(autoincrement())
+  name        String        @db.VarChar(100)
+  description String?
+  created_by  Int?
+  created_at  DateTime?     @default(now()) @db.Timestamp(6)
+  updated_at  DateTime?     @default(now()) @db.Timestamp(6)
+  leaderboard leaderboard[]
+
+  @@map("minigames")
+}
+
+model leaderboard {
+  score_id    Int        @id @default(autoincrement())
+  user_id     Int?
+  game_id     Int?
+  score       Int?       @default(0)
+  achieved_at DateTime?  @default(now()) @db.Timestamp(6)
+  minigames   minigames? @relation(fields: [game_id], references: [game_id], onDelete: Cascade)
+  users       users?     @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("leaderboard")
+}
+
+model system_settings {
+  setting_id Int       @id @default(autoincrement())
+  key        String    @unique @db.VarChar(100)
+  value      String?
+  created_by Int?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  updated_at DateTime? @default(now()) @db.Timestamp(6)
+  creator    users?    @relation("SystemSettingCreator", fields: [created_by], references: [user_id], onDelete: SetNull)
+
+  @@map("system_settings")
+}
+
+model app_utilities {
+  utility_id     Int              @id @default(autoincrement())
+  key            String           @unique @db.VarChar(100)
+  name           String           @db.VarChar(100)
+  description    String?
+  icon_url       String?
+  route_path     String?          @db.VarChar(200)
+  is_active      Boolean?         @default(true)
+  category       String?          @db.VarChar(50)
+  display_order  Int?             @default(0)
+  created_by     Int?
+  created_at     DateTime?        @default(now()) @db.Timestamp(6)
+  updated_at     DateTime?        @default(now()) @db.Timestamp(6)
+  user_utilities user_utilities[]
+
+  @@map("app_utilities")
+}
+
+model user_utilities {
+  user_id          Int
+  utility_id       Int
+  is_enabled       Boolean?      @default(true)
+  pinned           Boolean?      @default(false)
+  customized_label String?       @db.VarChar(100)
+  updated_at       DateTime?     @default(now()) @db.Timestamp(6)
+  app_utilities    app_utilities @relation(fields: [utility_id], references: [utility_id], onDelete: Cascade)
+
+  @@id([user_id, utility_id])
+  @@map("user_utilities")
+}
+
+model activity_logs {
+  log_id     Int       @id @default(autoincrement())
+  user_id    Int?
+  action     String?   @db.VarChar(100)
+  details    Json?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  users      users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+
+  @@map("activity_logs")
+}
+
+model files {
+  file_id       Int       @id @default(autoincrement())
+  filename      String    @db.VarChar(255)
+  original_name String    @db.VarChar(255)
+  file_path     String
+  file_size     Int
+  mime_type     String    @db.VarChar(100)
+  uploaded_by   Int?
+  created_at    DateTime? @default(now()) @db.Timestamp(6)
+
+  @@map("files")
+}
+
+model registrations {
+  reg_id              Int       @id @default(autoincrement())
+  user_id             Int
+  course_id           Int
+  payment_id          Int?
+  /// Số lần học khóa này của học viên (1 = lần đầu, 2 = học lại lần 2, ...)
+  attempt_no          Int       @default(1)
+  registration_status String?   @default("pending") @db.VarChar(20)
+  registered_at       DateTime? @default(now()) @db.Timestamp(6)
+  activated_at        DateTime? @db.Timestamp(6)
+  completed_at        DateTime? @db.Timestamp(6)
+  courses             courses?  @relation(fields: [course_id], references: [course_id], onDelete: Cascade)
+  users               users?    @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  payments            payments? @relation(fields: [payment_id], references: [payment_id], onDelete: SetNull)
+  // Quan hệ tới các bảng gắn với từng lần học (attempt)
+  progress                progress[]
+  lesson_progress_details lesson_progress_details[]
+  class_group_members     class_group_members[]
+  listening_attempt_sets  listening_attempt_sets[]
+  quiz_attempt_sets       quiz_attempt_sets[]
+  writing_submissions     writing_submissions[]
+
+  /// Một học viên có thể học lại 1 khóa nhiều lần, nhưng attempt_no phải khác nhau
+  @@unique([user_id, course_id, attempt_no])
+  @@map("registrations")
+}
