@@ -1,0 +1,56 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Permission = exports.UserStatus = exports.UserRole = void 0;
+var UserRole;
+(function (UserRole) {
+    UserRole["SYSTEM_ADMIN"] = "system_admin";
+    UserRole["ACADEMIC_MANAGER"] = "academic_manager";
+    UserRole["SALES_STAFF"] = "sales_staff";
+    UserRole["TEACHER"] = "teacher";
+    UserRole["STUDENT"] = "student";
+})(UserRole || (exports.UserRole = UserRole = {}));
+var UserStatus;
+(function (UserStatus) {
+    UserStatus["ACTIVE"] = "active";
+    UserStatus["INACTIVE"] = "inactive";
+    UserStatus["BANNED"] = "banned";
+})(UserStatus || (exports.UserStatus = UserStatus = {}));
+var Permission;
+(function (Permission) {
+    Permission["USER_MANAGE"] = "user.manage";
+    Permission["ROLE_MANAGE"] = "role.manage";
+    Permission["COURSE_MANAGE"] = "course.manage";
+    Permission["COURSE_MANAGE_TEACHER"] = "course.manage.teacher";
+    Permission["CLASS_MANAGE"] = "class.manage";
+    Permission["CLASS_MANAGE_TEACHER"] = "class.manage.teacher";
+    Permission["ATTENDANCE_GRADING_MANAGE"] = "attendance.grading.manage";
+    Permission["ATTENDANCE_GRADING_TEACHER"] = "attendance.grading.teacher";
+    Permission["LESSON_MANAGE"] = "lesson.manage";
+    Permission["LESSON_MANAGE_TEACHER"] = "lesson.manage.teacher";
+    Permission["CONTENT_MANAGE"] = "content.manage";
+    Permission["CONTENT_APPROVE"] = "content.approve";
+    Permission["CLASS_TEACH"] = "class.teach";
+    Permission["PROGRESS_VIEW"] = "progress.view";
+    Permission["PROGRESS_VIEW_TEACHER"] = "progress.view.teacher";
+    Permission["PROGRESS_VIEW_SALES_STAFF"] = "progress.view.sales_staff";
+    Permission["PROGRESS_VIEW_ALL"] = "progress.view_all";
+    Permission["PROGRESS_VIEW_COURSE"] = "progress.view_course";
+    Permission["PAYMENT_MANAGE"] = "payment.manage";
+    Permission["PAYMENT_MANAGE_SALES_STAFF"] = "payment.manage.sales_staff";
+    Permission["PAYMENT_RECORD"] = "payment.record";
+    Permission["PAYMENT_VIEW"] = "payment.view";
+    Permission["REGISTRATION_MANAGE_SALES_STAFF"] = "registration.manage.sales_staff";
+    Permission["CERTIFICATE_MANAGE"] = "certificate.manage";
+    Permission["CERTIFICATE_VIEW"] = "certificate.view";
+    Permission["REVIEW_MANAGE"] = "review.manage";
+    Permission["CHAT_MANAGE"] = "chat.manage";
+    Permission["NOTIFICATION_SEND"] = "notification.send";
+    Permission["NOTIFICATION_MANAGE"] = "notification.manage";
+    Permission["NOTIFICATION_MANAGE_TEACHER"] = "notification.manage.teacher";
+    Permission["MINIGAME_MANAGE"] = "minigame.manage";
+    Permission["POSTS_MANAGE"] = "posts.manage";
+    Permission["SYSTEM_CONFIG"] = "system.config";
+    Permission["UTILITIES_MANAGE"] = "utilities.manage";
+    Permission["ACTIVITY_MANAGE"] = "activity.manage";
+})(Permission || (exports.Permission = Permission = {}));
+//# sourceMappingURL=user-role.enum.js.map

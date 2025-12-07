@@ -1,0 +1,589 @@
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace";
+export type post_reactionsModel = runtime.Types.Result.DefaultSelection<Prisma.$post_reactionsPayload>;
+export type AggregatePost_reactions = {
+    _count: Post_reactionsCountAggregateOutputType | null;
+    _avg: Post_reactionsAvgAggregateOutputType | null;
+    _sum: Post_reactionsSumAggregateOutputType | null;
+    _min: Post_reactionsMinAggregateOutputType | null;
+    _max: Post_reactionsMaxAggregateOutputType | null;
+};
+export type Post_reactionsAvgAggregateOutputType = {
+    reaction_id: number | null;
+    post_id: number | null;
+    user_id: number | null;
+};
+export type Post_reactionsSumAggregateOutputType = {
+    reaction_id: number | null;
+    post_id: number | null;
+    user_id: number | null;
+};
+export type Post_reactionsMinAggregateOutputType = {
+    reaction_id: number | null;
+    post_id: number | null;
+    user_id: number | null;
+    reaction_type: string | null;
+    created_at: Date | null;
+};
+export type Post_reactionsMaxAggregateOutputType = {
+    reaction_id: number | null;
+    post_id: number | null;
+    user_id: number | null;
+    reaction_type: string | null;
+    created_at: Date | null;
+};
+export type Post_reactionsCountAggregateOutputType = {
+    reaction_id: number;
+    post_id: number;
+    user_id: number;
+    reaction_type: number;
+    created_at: number;
+    _all: number;
+};
+export type Post_reactionsAvgAggregateInputType = {
+    reaction_id?: true;
+    post_id?: true;
+    user_id?: true;
+};
+export type Post_reactionsSumAggregateInputType = {
+    reaction_id?: true;
+    post_id?: true;
+    user_id?: true;
+};
+export type Post_reactionsMinAggregateInputType = {
+    reaction_id?: true;
+    post_id?: true;
+    user_id?: true;
+    reaction_type?: true;
+    created_at?: true;
+};
+export type Post_reactionsMaxAggregateInputType = {
+    reaction_id?: true;
+    post_id?: true;
+    user_id?: true;
+    reaction_type?: true;
+    created_at?: true;
+};
+export type Post_reactionsCountAggregateInputType = {
+    reaction_id?: true;
+    post_id?: true;
+    user_id?: true;
+    reaction_type?: true;
+    created_at?: true;
+    _all?: true;
+};
+export type Post_reactionsAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.post_reactionsWhereInput;
+    orderBy?: Prisma.post_reactionsOrderByWithRelationInput | Prisma.post_reactionsOrderByWithRelationInput[];
+    cursor?: Prisma.post_reactionsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    _count?: true | Post_reactionsCountAggregateInputType;
+    _avg?: Post_reactionsAvgAggregateInputType;
+    _sum?: Post_reactionsSumAggregateInputType;
+    _min?: Post_reactionsMinAggregateInputType;
+    _max?: Post_reactionsMaxAggregateInputType;
+};
+export type GetPost_reactionsAggregateType<T extends Post_reactionsAggregateArgs> = {
+    [P in keyof T & keyof AggregatePost_reactions]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregatePost_reactions[P]> : Prisma.GetScalarType<T[P], AggregatePost_reactions[P]>;
+};
+export type post_reactionsGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.post_reactionsWhereInput;
+    orderBy?: Prisma.post_reactionsOrderByWithAggregationInput | Prisma.post_reactionsOrderByWithAggregationInput[];
+    by: Prisma.Post_reactionsScalarFieldEnum[] | Prisma.Post_reactionsScalarFieldEnum;
+    having?: Prisma.post_reactionsScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: Post_reactionsCountAggregateInputType | true;
+    _avg?: Post_reactionsAvgAggregateInputType;
+    _sum?: Post_reactionsSumAggregateInputType;
+    _min?: Post_reactionsMinAggregateInputType;
+    _max?: Post_reactionsMaxAggregateInputType;
+};
+export type Post_reactionsGroupByOutputType = {
+    reaction_id: number;
+    post_id: number | null;
+    user_id: number | null;
+    reaction_type: string | null;
+    created_at: Date | null;
+    _count: Post_reactionsCountAggregateOutputType | null;
+    _avg: Post_reactionsAvgAggregateOutputType | null;
+    _sum: Post_reactionsSumAggregateOutputType | null;
+    _min: Post_reactionsMinAggregateOutputType | null;
+    _max: Post_reactionsMaxAggregateOutputType | null;
+};
+type GetPost_reactionsGroupByPayload<T extends post_reactionsGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<Post_reactionsGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof Post_reactionsGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], Post_reactionsGroupByOutputType[P]> : Prisma.GetScalarType<T[P], Post_reactionsGroupByOutputType[P]>;
+}>>;
+export type post_reactionsWhereInput = {
+    AND?: Prisma.post_reactionsWhereInput | Prisma.post_reactionsWhereInput[];
+    OR?: Prisma.post_reactionsWhereInput[];
+    NOT?: Prisma.post_reactionsWhereInput | Prisma.post_reactionsWhereInput[];
+    reaction_id?: Prisma.IntFilter<"post_reactions"> | number;
+    post_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    user_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    reaction_type?: Prisma.StringNullableFilter<"post_reactions"> | string | null;
+    created_at?: Prisma.DateTimeNullableFilter<"post_reactions"> | Date | string | null;
+    posts?: Prisma.XOR<Prisma.PostsNullableScalarRelationFilter, Prisma.postsWhereInput> | null;
+};
+export type post_reactionsOrderByWithRelationInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    user_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    reaction_type?: Prisma.SortOrderInput | Prisma.SortOrder;
+    created_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    posts?: Prisma.postsOrderByWithRelationInput;
+};
+export type post_reactionsWhereUniqueInput = Prisma.AtLeast<{
+    reaction_id?: number;
+    post_id_user_id?: Prisma.post_reactionsPost_idUser_idCompoundUniqueInput;
+    AND?: Prisma.post_reactionsWhereInput | Prisma.post_reactionsWhereInput[];
+    OR?: Prisma.post_reactionsWhereInput[];
+    NOT?: Prisma.post_reactionsWhereInput | Prisma.post_reactionsWhereInput[];
+    post_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    user_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    reaction_type?: Prisma.StringNullableFilter<"post_reactions"> | string | null;
+    created_at?: Prisma.DateTimeNullableFilter<"post_reactions"> | Date | string | null;
+    posts?: Prisma.XOR<Prisma.PostsNullableScalarRelationFilter, Prisma.postsWhereInput> | null;
+}, "reaction_id" | "post_id_user_id">;
+export type post_reactionsOrderByWithAggregationInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    user_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    reaction_type?: Prisma.SortOrderInput | Prisma.SortOrder;
+    created_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    _count?: Prisma.post_reactionsCountOrderByAggregateInput;
+    _avg?: Prisma.post_reactionsAvgOrderByAggregateInput;
+    _max?: Prisma.post_reactionsMaxOrderByAggregateInput;
+    _min?: Prisma.post_reactionsMinOrderByAggregateInput;
+    _sum?: Prisma.post_reactionsSumOrderByAggregateInput;
+};
+export type post_reactionsScalarWhereWithAggregatesInput = {
+    AND?: Prisma.post_reactionsScalarWhereWithAggregatesInput | Prisma.post_reactionsScalarWhereWithAggregatesInput[];
+    OR?: Prisma.post_reactionsScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.post_reactionsScalarWhereWithAggregatesInput | Prisma.post_reactionsScalarWhereWithAggregatesInput[];
+    reaction_id?: Prisma.IntWithAggregatesFilter<"post_reactions"> | number;
+    post_id?: Prisma.IntNullableWithAggregatesFilter<"post_reactions"> | number | null;
+    user_id?: Prisma.IntNullableWithAggregatesFilter<"post_reactions"> | number | null;
+    reaction_type?: Prisma.StringNullableWithAggregatesFilter<"post_reactions"> | string | null;
+    created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"post_reactions"> | Date | string | null;
+};
+export type post_reactionsCreateInput = {
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+    posts?: Prisma.postsCreateNestedOneWithoutPost_reactionsInput;
+};
+export type post_reactionsUncheckedCreateInput = {
+    reaction_id?: number;
+    post_id?: number | null;
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+};
+export type post_reactionsUpdateInput = {
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    posts?: Prisma.postsUpdateOneWithoutPost_reactionsNestedInput;
+};
+export type post_reactionsUncheckedUpdateInput = {
+    reaction_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    post_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type post_reactionsCreateManyInput = {
+    reaction_id?: number;
+    post_id?: number | null;
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+};
+export type post_reactionsUpdateManyMutationInput = {
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type post_reactionsUncheckedUpdateManyInput = {
+    reaction_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    post_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type Post_reactionsListRelationFilter = {
+    every?: Prisma.post_reactionsWhereInput;
+    some?: Prisma.post_reactionsWhereInput;
+    none?: Prisma.post_reactionsWhereInput;
+};
+export type post_reactionsOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type post_reactionsPost_idUser_idCompoundUniqueInput = {
+    post_id: number;
+    user_id: number;
+};
+export type post_reactionsCountOrderByAggregateInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    reaction_type?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type post_reactionsAvgOrderByAggregateInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+};
+export type post_reactionsMaxOrderByAggregateInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    reaction_type?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type post_reactionsMinOrderByAggregateInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    reaction_type?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type post_reactionsSumOrderByAggregateInput = {
+    reaction_id?: Prisma.SortOrder;
+    post_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+};
+export type post_reactionsCreateNestedManyWithoutPostsInput = {
+    create?: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput> | Prisma.post_reactionsCreateWithoutPostsInput[] | Prisma.post_reactionsUncheckedCreateWithoutPostsInput[];
+    connectOrCreate?: Prisma.post_reactionsCreateOrConnectWithoutPostsInput | Prisma.post_reactionsCreateOrConnectWithoutPostsInput[];
+    createMany?: Prisma.post_reactionsCreateManyPostsInputEnvelope;
+    connect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+};
+export type post_reactionsUncheckedCreateNestedManyWithoutPostsInput = {
+    create?: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput> | Prisma.post_reactionsCreateWithoutPostsInput[] | Prisma.post_reactionsUncheckedCreateWithoutPostsInput[];
+    connectOrCreate?: Prisma.post_reactionsCreateOrConnectWithoutPostsInput | Prisma.post_reactionsCreateOrConnectWithoutPostsInput[];
+    createMany?: Prisma.post_reactionsCreateManyPostsInputEnvelope;
+    connect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+};
+export type post_reactionsUpdateManyWithoutPostsNestedInput = {
+    create?: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput> | Prisma.post_reactionsCreateWithoutPostsInput[] | Prisma.post_reactionsUncheckedCreateWithoutPostsInput[];
+    connectOrCreate?: Prisma.post_reactionsCreateOrConnectWithoutPostsInput | Prisma.post_reactionsCreateOrConnectWithoutPostsInput[];
+    upsert?: Prisma.post_reactionsUpsertWithWhereUniqueWithoutPostsInput | Prisma.post_reactionsUpsertWithWhereUniqueWithoutPostsInput[];
+    createMany?: Prisma.post_reactionsCreateManyPostsInputEnvelope;
+    set?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    disconnect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    delete?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    connect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    update?: Prisma.post_reactionsUpdateWithWhereUniqueWithoutPostsInput | Prisma.post_reactionsUpdateWithWhereUniqueWithoutPostsInput[];
+    updateMany?: Prisma.post_reactionsUpdateManyWithWhereWithoutPostsInput | Prisma.post_reactionsUpdateManyWithWhereWithoutPostsInput[];
+    deleteMany?: Prisma.post_reactionsScalarWhereInput | Prisma.post_reactionsScalarWhereInput[];
+};
+export type post_reactionsUncheckedUpdateManyWithoutPostsNestedInput = {
+    create?: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput> | Prisma.post_reactionsCreateWithoutPostsInput[] | Prisma.post_reactionsUncheckedCreateWithoutPostsInput[];
+    connectOrCreate?: Prisma.post_reactionsCreateOrConnectWithoutPostsInput | Prisma.post_reactionsCreateOrConnectWithoutPostsInput[];
+    upsert?: Prisma.post_reactionsUpsertWithWhereUniqueWithoutPostsInput | Prisma.post_reactionsUpsertWithWhereUniqueWithoutPostsInput[];
+    createMany?: Prisma.post_reactionsCreateManyPostsInputEnvelope;
+    set?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    disconnect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    delete?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    connect?: Prisma.post_reactionsWhereUniqueInput | Prisma.post_reactionsWhereUniqueInput[];
+    update?: Prisma.post_reactionsUpdateWithWhereUniqueWithoutPostsInput | Prisma.post_reactionsUpdateWithWhereUniqueWithoutPostsInput[];
+    updateMany?: Prisma.post_reactionsUpdateManyWithWhereWithoutPostsInput | Prisma.post_reactionsUpdateManyWithWhereWithoutPostsInput[];
+    deleteMany?: Prisma.post_reactionsScalarWhereInput | Prisma.post_reactionsScalarWhereInput[];
+};
+export type post_reactionsCreateWithoutPostsInput = {
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+};
+export type post_reactionsUncheckedCreateWithoutPostsInput = {
+    reaction_id?: number;
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+};
+export type post_reactionsCreateOrConnectWithoutPostsInput = {
+    where: Prisma.post_reactionsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput>;
+};
+export type post_reactionsCreateManyPostsInputEnvelope = {
+    data: Prisma.post_reactionsCreateManyPostsInput | Prisma.post_reactionsCreateManyPostsInput[];
+    skipDuplicates?: boolean;
+};
+export type post_reactionsUpsertWithWhereUniqueWithoutPostsInput = {
+    where: Prisma.post_reactionsWhereUniqueInput;
+    update: Prisma.XOR<Prisma.post_reactionsUpdateWithoutPostsInput, Prisma.post_reactionsUncheckedUpdateWithoutPostsInput>;
+    create: Prisma.XOR<Prisma.post_reactionsCreateWithoutPostsInput, Prisma.post_reactionsUncheckedCreateWithoutPostsInput>;
+};
+export type post_reactionsUpdateWithWhereUniqueWithoutPostsInput = {
+    where: Prisma.post_reactionsWhereUniqueInput;
+    data: Prisma.XOR<Prisma.post_reactionsUpdateWithoutPostsInput, Prisma.post_reactionsUncheckedUpdateWithoutPostsInput>;
+};
+export type post_reactionsUpdateManyWithWhereWithoutPostsInput = {
+    where: Prisma.post_reactionsScalarWhereInput;
+    data: Prisma.XOR<Prisma.post_reactionsUpdateManyMutationInput, Prisma.post_reactionsUncheckedUpdateManyWithoutPostsInput>;
+};
+export type post_reactionsScalarWhereInput = {
+    AND?: Prisma.post_reactionsScalarWhereInput | Prisma.post_reactionsScalarWhereInput[];
+    OR?: Prisma.post_reactionsScalarWhereInput[];
+    NOT?: Prisma.post_reactionsScalarWhereInput | Prisma.post_reactionsScalarWhereInput[];
+    reaction_id?: Prisma.IntFilter<"post_reactions"> | number;
+    post_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    user_id?: Prisma.IntNullableFilter<"post_reactions"> | number | null;
+    reaction_type?: Prisma.StringNullableFilter<"post_reactions"> | string | null;
+    created_at?: Prisma.DateTimeNullableFilter<"post_reactions"> | Date | string | null;
+};
+export type post_reactionsCreateManyPostsInput = {
+    reaction_id?: number;
+    user_id?: number | null;
+    reaction_type?: string | null;
+    created_at?: Date | string | null;
+};
+export type post_reactionsUpdateWithoutPostsInput = {
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type post_reactionsUncheckedUpdateWithoutPostsInput = {
+    reaction_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type post_reactionsUncheckedUpdateManyWithoutPostsInput = {
+    reaction_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    reaction_type?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type post_reactionsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    reaction_id?: boolean;
+    post_id?: boolean;
+    user_id?: boolean;
+    reaction_type?: boolean;
+    created_at?: boolean;
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+}, ExtArgs["result"]["post_reactions"]>;
+export type post_reactionsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    reaction_id?: boolean;
+    post_id?: boolean;
+    user_id?: boolean;
+    reaction_type?: boolean;
+    created_at?: boolean;
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+}, ExtArgs["result"]["post_reactions"]>;
+export type post_reactionsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    reaction_id?: boolean;
+    post_id?: boolean;
+    user_id?: boolean;
+    reaction_type?: boolean;
+    created_at?: boolean;
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+}, ExtArgs["result"]["post_reactions"]>;
+export type post_reactionsSelectScalar = {
+    reaction_id?: boolean;
+    post_id?: boolean;
+    user_id?: boolean;
+    reaction_type?: boolean;
+    created_at?: boolean;
+};
+export type post_reactionsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"reaction_id" | "post_id" | "user_id" | "reaction_type" | "created_at", ExtArgs["result"]["post_reactions"]>;
+export type post_reactionsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+};
+export type post_reactionsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+};
+export type post_reactionsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    posts?: boolean | Prisma.post_reactions$postsArgs<ExtArgs>;
+};
+export type $post_reactionsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "post_reactions";
+    objects: {
+        posts: Prisma.$postsPayload<ExtArgs> | null;
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        reaction_id: number;
+        post_id: number | null;
+        user_id: number | null;
+        reaction_type: string | null;
+        created_at: Date | null;
+    }, ExtArgs["result"]["post_reactions"]>;
+    composites: {};
+};
+export type post_reactionsGetPayload<S extends boolean | null | undefined | post_reactionsDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload, S>;
+export type post_reactionsCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<post_reactionsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: Post_reactionsCountAggregateInputType | true;
+};
+export interface post_reactionsDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['post_reactions'];
+        meta: {
+            name: 'post_reactions';
+        };
+    };
+    findUnique<T extends post_reactionsFindUniqueArgs>(args: Prisma.SelectSubset<T, post_reactionsFindUniqueArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends post_reactionsFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, post_reactionsFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends post_reactionsFindFirstArgs>(args?: Prisma.SelectSubset<T, post_reactionsFindFirstArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends post_reactionsFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, post_reactionsFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends post_reactionsFindManyArgs>(args?: Prisma.SelectSubset<T, post_reactionsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends post_reactionsCreateArgs>(args: Prisma.SelectSubset<T, post_reactionsCreateArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createMany<T extends post_reactionsCreateManyArgs>(args?: Prisma.SelectSubset<T, post_reactionsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    createManyAndReturn<T extends post_reactionsCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, post_reactionsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends post_reactionsDeleteArgs>(args: Prisma.SelectSubset<T, post_reactionsDeleteArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends post_reactionsUpdateArgs>(args: Prisma.SelectSubset<T, post_reactionsUpdateArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    deleteMany<T extends post_reactionsDeleteManyArgs>(args?: Prisma.SelectSubset<T, post_reactionsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateMany<T extends post_reactionsUpdateManyArgs>(args: Prisma.SelectSubset<T, post_reactionsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateManyAndReturn<T extends post_reactionsUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, post_reactionsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends post_reactionsUpsertArgs>(args: Prisma.SelectSubset<T, post_reactionsUpsertArgs<ExtArgs>>): Prisma.Prisma__post_reactionsClient<runtime.Types.Result.GetResult<Prisma.$post_reactionsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    count<T extends post_reactionsCountArgs>(args?: Prisma.Subset<T, post_reactionsCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Post_reactionsCountAggregateOutputType> : number>;
+    aggregate<T extends Post_reactionsAggregateArgs>(args: Prisma.Subset<T, Post_reactionsAggregateArgs>): Prisma.PrismaPromise<GetPost_reactionsAggregateType<T>>;
+    groupBy<T extends post_reactionsGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: post_reactionsGroupByArgs['orderBy'];
+    } : {
+        orderBy?: post_reactionsGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, post_reactionsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPost_reactionsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    readonly fields: post_reactionsFieldRefs;
+}
+export interface Prisma__post_reactionsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    posts<T extends Prisma.post_reactions$postsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.post_reactions$postsArgs<ExtArgs>>): Prisma.Prisma__postsClient<runtime.Types.Result.GetResult<Prisma.$postsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+export interface post_reactionsFieldRefs {
+    readonly reaction_id: Prisma.FieldRef<"post_reactions", 'Int'>;
+    readonly post_id: Prisma.FieldRef<"post_reactions", 'Int'>;
+    readonly user_id: Prisma.FieldRef<"post_reactions", 'Int'>;
+    readonly reaction_type: Prisma.FieldRef<"post_reactions", 'String'>;
+    readonly created_at: Prisma.FieldRef<"post_reactions", 'DateTime'>;
+}
+export type post_reactionsFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where: Prisma.post_reactionsWhereUniqueInput;
+};
+export type post_reactionsFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where: Prisma.post_reactionsWhereUniqueInput;
+};
+export type post_reactionsFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where?: Prisma.post_reactionsWhereInput;
+    orderBy?: Prisma.post_reactionsOrderByWithRelationInput | Prisma.post_reactionsOrderByWithRelationInput[];
+    cursor?: Prisma.post_reactionsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Post_reactionsScalarFieldEnum | Prisma.Post_reactionsScalarFieldEnum[];
+};
+export type post_reactionsFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where?: Prisma.post_reactionsWhereInput;
+    orderBy?: Prisma.post_reactionsOrderByWithRelationInput | Prisma.post_reactionsOrderByWithRelationInput[];
+    cursor?: Prisma.post_reactionsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Post_reactionsScalarFieldEnum | Prisma.Post_reactionsScalarFieldEnum[];
+};
+export type post_reactionsFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where?: Prisma.post_reactionsWhereInput;
+    orderBy?: Prisma.post_reactionsOrderByWithRelationInput | Prisma.post_reactionsOrderByWithRelationInput[];
+    cursor?: Prisma.post_reactionsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Post_reactionsScalarFieldEnum | Prisma.Post_reactionsScalarFieldEnum[];
+};
+export type post_reactionsCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    data?: Prisma.XOR<Prisma.post_reactionsCreateInput, Prisma.post_reactionsUncheckedCreateInput>;
+};
+export type post_reactionsCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.post_reactionsCreateManyInput | Prisma.post_reactionsCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+export type post_reactionsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelectCreateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    data: Prisma.post_reactionsCreateManyInput | Prisma.post_reactionsCreateManyInput[];
+    skipDuplicates?: boolean;
+    include?: Prisma.post_reactionsIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+export type post_reactionsUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.post_reactionsUpdateInput, Prisma.post_reactionsUncheckedUpdateInput>;
+    where: Prisma.post_reactionsWhereUniqueInput;
+};
+export type post_reactionsUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.XOR<Prisma.post_reactionsUpdateManyMutationInput, Prisma.post_reactionsUncheckedUpdateManyInput>;
+    where?: Prisma.post_reactionsWhereInput;
+    limit?: number;
+};
+export type post_reactionsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelectUpdateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.post_reactionsUpdateManyMutationInput, Prisma.post_reactionsUncheckedUpdateManyInput>;
+    where?: Prisma.post_reactionsWhereInput;
+    limit?: number;
+    include?: Prisma.post_reactionsIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+export type post_reactionsUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where: Prisma.post_reactionsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.post_reactionsCreateInput, Prisma.post_reactionsUncheckedCreateInput>;
+    update: Prisma.XOR<Prisma.post_reactionsUpdateInput, Prisma.post_reactionsUncheckedUpdateInput>;
+};
+export type post_reactionsDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+    where: Prisma.post_reactionsWhereUniqueInput;
+};
+export type post_reactionsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.post_reactionsWhereInput;
+    limit?: number;
+};
+export type post_reactions$postsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.postsSelect<ExtArgs> | null;
+    omit?: Prisma.postsOmit<ExtArgs> | null;
+    include?: Prisma.postsInclude<ExtArgs> | null;
+    where?: Prisma.postsWhereInput;
+};
+export type post_reactionsDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.post_reactionsSelect<ExtArgs> | null;
+    omit?: Prisma.post_reactionsOmit<ExtArgs> | null;
+    include?: Prisma.post_reactionsInclude<ExtArgs> | null;
+};
+export {};

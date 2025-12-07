@@ -1,0 +1,1084 @@
+import type * as runtime from "@prisma/client/runtime/library";
+import type * as Prisma from "../internal/prismaNamespace";
+export type quiz_attempt_setsModel = runtime.Types.Result.DefaultSelection<Prisma.$quiz_attempt_setsPayload>;
+export type AggregateQuiz_attempt_sets = {
+    _count: Quiz_attempt_setsCountAggregateOutputType | null;
+    _avg: Quiz_attempt_setsAvgAggregateOutputType | null;
+    _sum: Quiz_attempt_setsSumAggregateOutputType | null;
+    _min: Quiz_attempt_setsMinAggregateOutputType | null;
+    _max: Quiz_attempt_setsMaxAggregateOutputType | null;
+};
+export type Quiz_attempt_setsAvgAggregateOutputType = {
+    attempt_set_id: number | null;
+    user_id: number | null;
+    lesson_id: number | null;
+    reg_id: number | null;
+    average_score: runtime.Decimal | null;
+    total_questions: number | null;
+    correct_count: number | null;
+};
+export type Quiz_attempt_setsSumAggregateOutputType = {
+    attempt_set_id: number | null;
+    user_id: number | null;
+    lesson_id: number | null;
+    reg_id: number | null;
+    average_score: runtime.Decimal | null;
+    total_questions: number | null;
+    correct_count: number | null;
+};
+export type Quiz_attempt_setsMinAggregateOutputType = {
+    attempt_set_id: number | null;
+    user_id: number | null;
+    lesson_id: number | null;
+    reg_id: number | null;
+    average_score: runtime.Decimal | null;
+    total_questions: number | null;
+    correct_count: number | null;
+    created_at: Date | null;
+};
+export type Quiz_attempt_setsMaxAggregateOutputType = {
+    attempt_set_id: number | null;
+    user_id: number | null;
+    lesson_id: number | null;
+    reg_id: number | null;
+    average_score: runtime.Decimal | null;
+    total_questions: number | null;
+    correct_count: number | null;
+    created_at: Date | null;
+};
+export type Quiz_attempt_setsCountAggregateOutputType = {
+    attempt_set_id: number;
+    user_id: number;
+    lesson_id: number;
+    reg_id: number;
+    average_score: number;
+    total_questions: number;
+    correct_count: number;
+    created_at: number;
+    _all: number;
+};
+export type Quiz_attempt_setsAvgAggregateInputType = {
+    attempt_set_id?: true;
+    user_id?: true;
+    lesson_id?: true;
+    reg_id?: true;
+    average_score?: true;
+    total_questions?: true;
+    correct_count?: true;
+};
+export type Quiz_attempt_setsSumAggregateInputType = {
+    attempt_set_id?: true;
+    user_id?: true;
+    lesson_id?: true;
+    reg_id?: true;
+    average_score?: true;
+    total_questions?: true;
+    correct_count?: true;
+};
+export type Quiz_attempt_setsMinAggregateInputType = {
+    attempt_set_id?: true;
+    user_id?: true;
+    lesson_id?: true;
+    reg_id?: true;
+    average_score?: true;
+    total_questions?: true;
+    correct_count?: true;
+    created_at?: true;
+};
+export type Quiz_attempt_setsMaxAggregateInputType = {
+    attempt_set_id?: true;
+    user_id?: true;
+    lesson_id?: true;
+    reg_id?: true;
+    average_score?: true;
+    total_questions?: true;
+    correct_count?: true;
+    created_at?: true;
+};
+export type Quiz_attempt_setsCountAggregateInputType = {
+    attempt_set_id?: true;
+    user_id?: true;
+    lesson_id?: true;
+    reg_id?: true;
+    average_score?: true;
+    total_questions?: true;
+    correct_count?: true;
+    created_at?: true;
+    _all?: true;
+};
+export type Quiz_attempt_setsAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    orderBy?: Prisma.quiz_attempt_setsOrderByWithRelationInput | Prisma.quiz_attempt_setsOrderByWithRelationInput[];
+    cursor?: Prisma.quiz_attempt_setsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    _count?: true | Quiz_attempt_setsCountAggregateInputType;
+    _avg?: Quiz_attempt_setsAvgAggregateInputType;
+    _sum?: Quiz_attempt_setsSumAggregateInputType;
+    _min?: Quiz_attempt_setsMinAggregateInputType;
+    _max?: Quiz_attempt_setsMaxAggregateInputType;
+};
+export type GetQuiz_attempt_setsAggregateType<T extends Quiz_attempt_setsAggregateArgs> = {
+    [P in keyof T & keyof AggregateQuiz_attempt_sets]: P extends '_count' | 'count' ? T[P] extends true ? number : Prisma.GetScalarType<T[P], AggregateQuiz_attempt_sets[P]> : Prisma.GetScalarType<T[P], AggregateQuiz_attempt_sets[P]>;
+};
+export type quiz_attempt_setsGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    orderBy?: Prisma.quiz_attempt_setsOrderByWithAggregationInput | Prisma.quiz_attempt_setsOrderByWithAggregationInput[];
+    by: Prisma.Quiz_attempt_setsScalarFieldEnum[] | Prisma.Quiz_attempt_setsScalarFieldEnum;
+    having?: Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput;
+    take?: number;
+    skip?: number;
+    _count?: Quiz_attempt_setsCountAggregateInputType | true;
+    _avg?: Quiz_attempt_setsAvgAggregateInputType;
+    _sum?: Quiz_attempt_setsSumAggregateInputType;
+    _min?: Quiz_attempt_setsMinAggregateInputType;
+    _max?: Quiz_attempt_setsMaxAggregateInputType;
+};
+export type Quiz_attempt_setsGroupByOutputType = {
+    attempt_set_id: number;
+    user_id: number;
+    lesson_id: number;
+    reg_id: number | null;
+    average_score: runtime.Decimal | null;
+    total_questions: number | null;
+    correct_count: number | null;
+    created_at: Date | null;
+    _count: Quiz_attempt_setsCountAggregateOutputType | null;
+    _avg: Quiz_attempt_setsAvgAggregateOutputType | null;
+    _sum: Quiz_attempt_setsSumAggregateOutputType | null;
+    _min: Quiz_attempt_setsMinAggregateOutputType | null;
+    _max: Quiz_attempt_setsMaxAggregateOutputType | null;
+};
+type GetQuiz_attempt_setsGroupByPayload<T extends quiz_attempt_setsGroupByArgs> = Prisma.PrismaPromise<Array<Prisma.PickEnumerable<Quiz_attempt_setsGroupByOutputType, T['by']> & {
+    [P in ((keyof T) & (keyof Quiz_attempt_setsGroupByOutputType))]: P extends '_count' ? T[P] extends boolean ? number : Prisma.GetScalarType<T[P], Quiz_attempt_setsGroupByOutputType[P]> : Prisma.GetScalarType<T[P], Quiz_attempt_setsGroupByOutputType[P]>;
+}>>;
+export type quiz_attempt_setsWhereInput = {
+    AND?: Prisma.quiz_attempt_setsWhereInput | Prisma.quiz_attempt_setsWhereInput[];
+    OR?: Prisma.quiz_attempt_setsWhereInput[];
+    NOT?: Prisma.quiz_attempt_setsWhereInput | Prisma.quiz_attempt_setsWhereInput[];
+    attempt_set_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    user_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    lesson_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    reg_id?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    average_score?: Prisma.DecimalNullableFilter<"quiz_attempt_sets"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    correct_count?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    created_at?: Prisma.DateTimeNullableFilter<"quiz_attempt_sets"> | Date | string | null;
+    users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null;
+    lessons?: Prisma.XOR<Prisma.LessonsNullableScalarRelationFilter, Prisma.lessonsWhereInput> | null;
+    quiz_attempts?: Prisma.Quiz_attemptsListRelationFilter;
+    registrations?: Prisma.XOR<Prisma.RegistrationsNullableScalarRelationFilter, Prisma.registrationsWhereInput> | null;
+};
+export type quiz_attempt_setsOrderByWithRelationInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    average_score?: Prisma.SortOrderInput | Prisma.SortOrder;
+    total_questions?: Prisma.SortOrderInput | Prisma.SortOrder;
+    correct_count?: Prisma.SortOrderInput | Prisma.SortOrder;
+    created_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    users?: Prisma.usersOrderByWithRelationInput;
+    lessons?: Prisma.lessonsOrderByWithRelationInput;
+    quiz_attempts?: Prisma.quiz_attemptsOrderByRelationAggregateInput;
+    registrations?: Prisma.registrationsOrderByWithRelationInput;
+};
+export type quiz_attempt_setsWhereUniqueInput = Prisma.AtLeast<{
+    attempt_set_id?: number;
+    AND?: Prisma.quiz_attempt_setsWhereInput | Prisma.quiz_attempt_setsWhereInput[];
+    OR?: Prisma.quiz_attempt_setsWhereInput[];
+    NOT?: Prisma.quiz_attempt_setsWhereInput | Prisma.quiz_attempt_setsWhereInput[];
+    user_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    lesson_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    reg_id?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    average_score?: Prisma.DecimalNullableFilter<"quiz_attempt_sets"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    correct_count?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    created_at?: Prisma.DateTimeNullableFilter<"quiz_attempt_sets"> | Date | string | null;
+    users?: Prisma.XOR<Prisma.UsersNullableScalarRelationFilter, Prisma.usersWhereInput> | null;
+    lessons?: Prisma.XOR<Prisma.LessonsNullableScalarRelationFilter, Prisma.lessonsWhereInput> | null;
+    quiz_attempts?: Prisma.Quiz_attemptsListRelationFilter;
+    registrations?: Prisma.XOR<Prisma.RegistrationsNullableScalarRelationFilter, Prisma.registrationsWhereInput> | null;
+}, "attempt_set_id">;
+export type quiz_attempt_setsOrderByWithAggregationInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrderInput | Prisma.SortOrder;
+    average_score?: Prisma.SortOrderInput | Prisma.SortOrder;
+    total_questions?: Prisma.SortOrderInput | Prisma.SortOrder;
+    correct_count?: Prisma.SortOrderInput | Prisma.SortOrder;
+    created_at?: Prisma.SortOrderInput | Prisma.SortOrder;
+    _count?: Prisma.quiz_attempt_setsCountOrderByAggregateInput;
+    _avg?: Prisma.quiz_attempt_setsAvgOrderByAggregateInput;
+    _max?: Prisma.quiz_attempt_setsMaxOrderByAggregateInput;
+    _min?: Prisma.quiz_attempt_setsMinOrderByAggregateInput;
+    _sum?: Prisma.quiz_attempt_setsSumOrderByAggregateInput;
+};
+export type quiz_attempt_setsScalarWhereWithAggregatesInput = {
+    AND?: Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput | Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput[];
+    OR?: Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput[];
+    NOT?: Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput | Prisma.quiz_attempt_setsScalarWhereWithAggregatesInput[];
+    attempt_set_id?: Prisma.IntWithAggregatesFilter<"quiz_attempt_sets"> | number;
+    user_id?: Prisma.IntWithAggregatesFilter<"quiz_attempt_sets"> | number;
+    lesson_id?: Prisma.IntWithAggregatesFilter<"quiz_attempt_sets"> | number;
+    reg_id?: Prisma.IntNullableWithAggregatesFilter<"quiz_attempt_sets"> | number | null;
+    average_score?: Prisma.DecimalNullableWithAggregatesFilter<"quiz_attempt_sets"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.IntNullableWithAggregatesFilter<"quiz_attempt_sets"> | number | null;
+    correct_count?: Prisma.IntNullableWithAggregatesFilter<"quiz_attempt_sets"> | number | null;
+    created_at?: Prisma.DateTimeNullableWithAggregatesFilter<"quiz_attempt_sets"> | Date | string | null;
+};
+export type quiz_attempt_setsCreateInput = {
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    users?: Prisma.usersCreateNestedOneWithoutQuiz_attempt_setsInput;
+    lessons?: Prisma.lessonsCreateNestedOneWithoutQuiz_attempt_setsInput;
+    quiz_attempts?: Prisma.quiz_attemptsCreateNestedManyWithoutQuiz_attempt_setsInput;
+    registrations?: Prisma.registrationsCreateNestedOneWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUncheckedCreateInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    lesson_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedCreateNestedManyWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUpdateInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    users?: Prisma.usersUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    lessons?: Prisma.lessonsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    quiz_attempts?: Prisma.quiz_attemptsUpdateManyWithoutQuiz_attempt_setsNestedInput;
+    registrations?: Prisma.registrationsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedUpdateManyWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsCreateManyInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    lesson_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+};
+export type quiz_attempt_setsUpdateManyMutationInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type quiz_attempt_setsUncheckedUpdateManyInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type Quiz_attempt_setsListRelationFilter = {
+    every?: Prisma.quiz_attempt_setsWhereInput;
+    some?: Prisma.quiz_attempt_setsWhereInput;
+    none?: Prisma.quiz_attempt_setsWhereInput;
+};
+export type quiz_attempt_setsOrderByRelationAggregateInput = {
+    _count?: Prisma.SortOrder;
+};
+export type quiz_attempt_setsCountOrderByAggregateInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrder;
+    average_score?: Prisma.SortOrder;
+    total_questions?: Prisma.SortOrder;
+    correct_count?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type quiz_attempt_setsAvgOrderByAggregateInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrder;
+    average_score?: Prisma.SortOrder;
+    total_questions?: Prisma.SortOrder;
+    correct_count?: Prisma.SortOrder;
+};
+export type quiz_attempt_setsMaxOrderByAggregateInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrder;
+    average_score?: Prisma.SortOrder;
+    total_questions?: Prisma.SortOrder;
+    correct_count?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type quiz_attempt_setsMinOrderByAggregateInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrder;
+    average_score?: Prisma.SortOrder;
+    total_questions?: Prisma.SortOrder;
+    correct_count?: Prisma.SortOrder;
+    created_at?: Prisma.SortOrder;
+};
+export type quiz_attempt_setsSumOrderByAggregateInput = {
+    attempt_set_id?: Prisma.SortOrder;
+    user_id?: Prisma.SortOrder;
+    lesson_id?: Prisma.SortOrder;
+    reg_id?: Prisma.SortOrder;
+    average_score?: Prisma.SortOrder;
+    total_questions?: Prisma.SortOrder;
+    correct_count?: Prisma.SortOrder;
+};
+export type Quiz_attempt_setsNullableScalarRelationFilter = {
+    is?: Prisma.quiz_attempt_setsWhereInput | null;
+    isNot?: Prisma.quiz_attempt_setsWhereInput | null;
+};
+export type quiz_attempt_setsCreateNestedManyWithoutUsersInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput> | Prisma.quiz_attempt_setsCreateWithoutUsersInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyUsersInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUncheckedCreateNestedManyWithoutUsersInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput> | Prisma.quiz_attempt_setsCreateWithoutUsersInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyUsersInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUpdateManyWithoutUsersNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput> | Prisma.quiz_attempt_setsCreateWithoutUsersInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutUsersInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutUsersInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyUsersInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutUsersInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutUsersInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutUsersInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutUsersInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutUsersNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput> | Prisma.quiz_attempt_setsCreateWithoutUsersInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutUsersInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutUsersInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutUsersInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyUsersInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutUsersInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutUsersInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutUsersInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutUsersInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsCreateNestedManyWithoutLessonsInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput> | Prisma.quiz_attempt_setsCreateWithoutLessonsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyLessonsInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUncheckedCreateNestedManyWithoutLessonsInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput> | Prisma.quiz_attempt_setsCreateWithoutLessonsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyLessonsInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUpdateManyWithoutLessonsNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput> | Prisma.quiz_attempt_setsCreateWithoutLessonsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutLessonsInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutLessonsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyLessonsInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutLessonsInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutLessonsInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutLessonsInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutLessonsInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutLessonsNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput> | Prisma.quiz_attempt_setsCreateWithoutLessonsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutLessonsInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutLessonsInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutLessonsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyLessonsInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutLessonsInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutLessonsInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutLessonsInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutLessonsInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsCreateNestedOneWithoutQuiz_attemptsInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutQuiz_attemptsInput>;
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutQuiz_attemptsInput;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput;
+};
+export type quiz_attempt_setsUpdateOneWithoutQuiz_attemptsNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutQuiz_attemptsInput>;
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutQuiz_attemptsInput;
+    upsert?: Prisma.quiz_attempt_setsUpsertWithoutQuiz_attemptsInput;
+    disconnect?: Prisma.quiz_attempt_setsWhereInput | boolean;
+    delete?: Prisma.quiz_attempt_setsWhereInput | boolean;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput;
+    update?: Prisma.XOR<Prisma.XOR<Prisma.quiz_attempt_setsUpdateToOneWithWhereWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUpdateWithoutQuiz_attemptsInput>, Prisma.quiz_attempt_setsUncheckedUpdateWithoutQuiz_attemptsInput>;
+};
+export type quiz_attempt_setsCreateNestedManyWithoutRegistrationsInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput> | Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyRegistrationsInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUncheckedCreateNestedManyWithoutRegistrationsInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput> | Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyRegistrationsInputEnvelope;
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+};
+export type quiz_attempt_setsUpdateManyWithoutRegistrationsNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput> | Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutRegistrationsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyRegistrationsInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutRegistrationsInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutRegistrationsInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutRegistrationsNestedInput = {
+    create?: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput> | Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput[] | Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput[];
+    connectOrCreate?: Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput | Prisma.quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput[];
+    upsert?: Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpsertWithWhereUniqueWithoutRegistrationsInput[];
+    createMany?: Prisma.quiz_attempt_setsCreateManyRegistrationsInputEnvelope;
+    set?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    disconnect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    delete?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    connect?: Prisma.quiz_attempt_setsWhereUniqueInput | Prisma.quiz_attempt_setsWhereUniqueInput[];
+    update?: Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpdateWithWhereUniqueWithoutRegistrationsInput[];
+    updateMany?: Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutRegistrationsInput | Prisma.quiz_attempt_setsUpdateManyWithWhereWithoutRegistrationsInput[];
+    deleteMany?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+};
+export type quiz_attempt_setsCreateWithoutUsersInput = {
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    lessons?: Prisma.lessonsCreateNestedOneWithoutQuiz_attempt_setsInput;
+    quiz_attempts?: Prisma.quiz_attemptsCreateNestedManyWithoutQuiz_attempt_setsInput;
+    registrations?: Prisma.registrationsCreateNestedOneWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUncheckedCreateWithoutUsersInput = {
+    attempt_set_id?: number;
+    lesson_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedCreateNestedManyWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsCreateOrConnectWithoutUsersInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput>;
+};
+export type quiz_attempt_setsCreateManyUsersInputEnvelope = {
+    data: Prisma.quiz_attempt_setsCreateManyUsersInput | Prisma.quiz_attempt_setsCreateManyUsersInput[];
+    skipDuplicates?: boolean;
+};
+export type quiz_attempt_setsUpsertWithWhereUniqueWithoutUsersInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    update: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutUsersInput>;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutUsersInput>;
+};
+export type quiz_attempt_setsUpdateWithWhereUniqueWithoutUsersInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutUsersInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutUsersInput>;
+};
+export type quiz_attempt_setsUpdateManyWithWhereWithoutUsersInput = {
+    where: Prisma.quiz_attempt_setsScalarWhereInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateManyMutationInput, Prisma.quiz_attempt_setsUncheckedUpdateManyWithoutUsersInput>;
+};
+export type quiz_attempt_setsScalarWhereInput = {
+    AND?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+    OR?: Prisma.quiz_attempt_setsScalarWhereInput[];
+    NOT?: Prisma.quiz_attempt_setsScalarWhereInput | Prisma.quiz_attempt_setsScalarWhereInput[];
+    attempt_set_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    user_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    lesson_id?: Prisma.IntFilter<"quiz_attempt_sets"> | number;
+    reg_id?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    average_score?: Prisma.DecimalNullableFilter<"quiz_attempt_sets"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    correct_count?: Prisma.IntNullableFilter<"quiz_attempt_sets"> | number | null;
+    created_at?: Prisma.DateTimeNullableFilter<"quiz_attempt_sets"> | Date | string | null;
+};
+export type quiz_attempt_setsCreateWithoutLessonsInput = {
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    users?: Prisma.usersCreateNestedOneWithoutQuiz_attempt_setsInput;
+    quiz_attempts?: Prisma.quiz_attemptsCreateNestedManyWithoutQuiz_attempt_setsInput;
+    registrations?: Prisma.registrationsCreateNestedOneWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUncheckedCreateWithoutLessonsInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedCreateNestedManyWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsCreateOrConnectWithoutLessonsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput>;
+};
+export type quiz_attempt_setsCreateManyLessonsInputEnvelope = {
+    data: Prisma.quiz_attempt_setsCreateManyLessonsInput | Prisma.quiz_attempt_setsCreateManyLessonsInput[];
+    skipDuplicates?: boolean;
+};
+export type quiz_attempt_setsUpsertWithWhereUniqueWithoutLessonsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    update: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutLessonsInput>;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutLessonsInput>;
+};
+export type quiz_attempt_setsUpdateWithWhereUniqueWithoutLessonsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutLessonsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutLessonsInput>;
+};
+export type quiz_attempt_setsUpdateManyWithWhereWithoutLessonsInput = {
+    where: Prisma.quiz_attempt_setsScalarWhereInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateManyMutationInput, Prisma.quiz_attempt_setsUncheckedUpdateManyWithoutLessonsInput>;
+};
+export type quiz_attempt_setsCreateWithoutQuiz_attemptsInput = {
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    users?: Prisma.usersCreateNestedOneWithoutQuiz_attempt_setsInput;
+    lessons?: Prisma.lessonsCreateNestedOneWithoutQuiz_attempt_setsInput;
+    registrations?: Prisma.registrationsCreateNestedOneWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUncheckedCreateWithoutQuiz_attemptsInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    lesson_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+};
+export type quiz_attempt_setsCreateOrConnectWithoutQuiz_attemptsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutQuiz_attemptsInput>;
+};
+export type quiz_attempt_setsUpsertWithoutQuiz_attemptsInput = {
+    update: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutQuiz_attemptsInput>;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutQuiz_attemptsInput>;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+};
+export type quiz_attempt_setsUpdateToOneWithWhereWithoutQuiz_attemptsInput = {
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutQuiz_attemptsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutQuiz_attemptsInput>;
+};
+export type quiz_attempt_setsUpdateWithoutQuiz_attemptsInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    users?: Prisma.usersUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    lessons?: Prisma.lessonsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    registrations?: Prisma.registrationsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateWithoutQuiz_attemptsInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type quiz_attempt_setsCreateWithoutRegistrationsInput = {
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    users?: Prisma.usersCreateNestedOneWithoutQuiz_attempt_setsInput;
+    lessons?: Prisma.lessonsCreateNestedOneWithoutQuiz_attempt_setsInput;
+    quiz_attempts?: Prisma.quiz_attemptsCreateNestedManyWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    lesson_id: number;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedCreateNestedManyWithoutQuiz_attempt_setsInput;
+};
+export type quiz_attempt_setsCreateOrConnectWithoutRegistrationsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput>;
+};
+export type quiz_attempt_setsCreateManyRegistrationsInputEnvelope = {
+    data: Prisma.quiz_attempt_setsCreateManyRegistrationsInput | Prisma.quiz_attempt_setsCreateManyRegistrationsInput[];
+    skipDuplicates?: boolean;
+};
+export type quiz_attempt_setsUpsertWithWhereUniqueWithoutRegistrationsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    update: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutRegistrationsInput>;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedCreateWithoutRegistrationsInput>;
+};
+export type quiz_attempt_setsUpdateWithWhereUniqueWithoutRegistrationsInput = {
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateWithoutRegistrationsInput, Prisma.quiz_attempt_setsUncheckedUpdateWithoutRegistrationsInput>;
+};
+export type quiz_attempt_setsUpdateManyWithWhereWithoutRegistrationsInput = {
+    where: Prisma.quiz_attempt_setsScalarWhereInput;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateManyMutationInput, Prisma.quiz_attempt_setsUncheckedUpdateManyWithoutRegistrationsInput>;
+};
+export type quiz_attempt_setsCreateManyUsersInput = {
+    attempt_set_id?: number;
+    lesson_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+};
+export type quiz_attempt_setsUpdateWithoutUsersInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    lessons?: Prisma.lessonsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    quiz_attempts?: Prisma.quiz_attemptsUpdateManyWithoutQuiz_attempt_setsNestedInput;
+    registrations?: Prisma.registrationsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateWithoutUsersInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedUpdateManyWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutUsersInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type quiz_attempt_setsCreateManyLessonsInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    reg_id?: number | null;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+};
+export type quiz_attempt_setsUpdateWithoutLessonsInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    users?: Prisma.usersUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    quiz_attempts?: Prisma.quiz_attemptsUpdateManyWithoutQuiz_attempt_setsNestedInput;
+    registrations?: Prisma.registrationsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateWithoutLessonsInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedUpdateManyWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutLessonsInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    reg_id?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type quiz_attempt_setsCreateManyRegistrationsInput = {
+    attempt_set_id?: number;
+    user_id: number;
+    lesson_id: number;
+    average_score?: runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: number | null;
+    correct_count?: number | null;
+    created_at?: Date | string | null;
+};
+export type quiz_attempt_setsUpdateWithoutRegistrationsInput = {
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    users?: Prisma.usersUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    lessons?: Prisma.lessonsUpdateOneWithoutQuiz_attempt_setsNestedInput;
+    quiz_attempts?: Prisma.quiz_attemptsUpdateManyWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateWithoutRegistrationsInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+    quiz_attempts?: Prisma.quiz_attemptsUncheckedUpdateManyWithoutQuiz_attempt_setsNestedInput;
+};
+export type quiz_attempt_setsUncheckedUpdateManyWithoutRegistrationsInput = {
+    attempt_set_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    user_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    lesson_id?: Prisma.IntFieldUpdateOperationsInput | number;
+    average_score?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null;
+    total_questions?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    correct_count?: Prisma.NullableIntFieldUpdateOperationsInput | number | null;
+    created_at?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
+};
+export type Quiz_attempt_setsCountOutputType = {
+    quiz_attempts: number;
+};
+export type Quiz_attempt_setsCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    quiz_attempts?: boolean | Quiz_attempt_setsCountOutputTypeCountQuiz_attemptsArgs;
+};
+export type Quiz_attempt_setsCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.Quiz_attempt_setsCountOutputTypeSelect<ExtArgs> | null;
+};
+export type Quiz_attempt_setsCountOutputTypeCountQuiz_attemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.quiz_attemptsWhereInput;
+};
+export type quiz_attempt_setsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    attempt_set_id?: boolean;
+    user_id?: boolean;
+    lesson_id?: boolean;
+    reg_id?: boolean;
+    average_score?: boolean;
+    total_questions?: boolean;
+    correct_count?: boolean;
+    created_at?: boolean;
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    quiz_attempts?: boolean | Prisma.quiz_attempt_sets$quiz_attemptsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+    _count?: boolean | Prisma.Quiz_attempt_setsCountOutputTypeDefaultArgs<ExtArgs>;
+}, ExtArgs["result"]["quiz_attempt_sets"]>;
+export type quiz_attempt_setsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    attempt_set_id?: boolean;
+    user_id?: boolean;
+    lesson_id?: boolean;
+    reg_id?: boolean;
+    average_score?: boolean;
+    total_questions?: boolean;
+    correct_count?: boolean;
+    created_at?: boolean;
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+}, ExtArgs["result"]["quiz_attempt_sets"]>;
+export type quiz_attempt_setsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
+    attempt_set_id?: boolean;
+    user_id?: boolean;
+    lesson_id?: boolean;
+    reg_id?: boolean;
+    average_score?: boolean;
+    total_questions?: boolean;
+    correct_count?: boolean;
+    created_at?: boolean;
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+}, ExtArgs["result"]["quiz_attempt_sets"]>;
+export type quiz_attempt_setsSelectScalar = {
+    attempt_set_id?: boolean;
+    user_id?: boolean;
+    lesson_id?: boolean;
+    reg_id?: boolean;
+    average_score?: boolean;
+    total_questions?: boolean;
+    correct_count?: boolean;
+    created_at?: boolean;
+};
+export type quiz_attempt_setsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"attempt_set_id" | "user_id" | "lesson_id" | "reg_id" | "average_score" | "total_questions" | "correct_count" | "created_at", ExtArgs["result"]["quiz_attempt_sets"]>;
+export type quiz_attempt_setsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    quiz_attempts?: boolean | Prisma.quiz_attempt_sets$quiz_attemptsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+    _count?: boolean | Prisma.Quiz_attempt_setsCountOutputTypeDefaultArgs<ExtArgs>;
+};
+export type quiz_attempt_setsIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+};
+export type quiz_attempt_setsIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    users?: boolean | Prisma.quiz_attempt_sets$usersArgs<ExtArgs>;
+    lessons?: boolean | Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>;
+    registrations?: boolean | Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>;
+};
+export type $quiz_attempt_setsPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    name: "quiz_attempt_sets";
+    objects: {
+        users: Prisma.$usersPayload<ExtArgs> | null;
+        lessons: Prisma.$lessonsPayload<ExtArgs> | null;
+        quiz_attempts: Prisma.$quiz_attemptsPayload<ExtArgs>[];
+        registrations: Prisma.$registrationsPayload<ExtArgs> | null;
+    };
+    scalars: runtime.Types.Extensions.GetPayloadResult<{
+        attempt_set_id: number;
+        user_id: number;
+        lesson_id: number;
+        reg_id: number | null;
+        average_score: runtime.Decimal | null;
+        total_questions: number | null;
+        correct_count: number | null;
+        created_at: Date | null;
+    }, ExtArgs["result"]["quiz_attempt_sets"]>;
+    composites: {};
+};
+export type quiz_attempt_setsGetPayload<S extends boolean | null | undefined | quiz_attempt_setsDefaultArgs> = runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload, S>;
+export type quiz_attempt_setsCountArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = Omit<quiz_attempt_setsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+    select?: Quiz_attempt_setsCountAggregateInputType | true;
+};
+export interface quiz_attempt_setsDelegate<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: {
+        types: Prisma.TypeMap<ExtArgs>['model']['quiz_attempt_sets'];
+        meta: {
+            name: 'quiz_attempt_sets';
+        };
+    };
+    findUnique<T extends quiz_attempt_setsFindUniqueArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsFindUniqueArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findUniqueOrThrow<T extends quiz_attempt_setsFindUniqueOrThrowArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsFindUniqueOrThrowArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findFirst<T extends quiz_attempt_setsFindFirstArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsFindFirstArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    findFirstOrThrow<T extends quiz_attempt_setsFindFirstOrThrowArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsFindFirstOrThrowArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    findMany<T extends quiz_attempt_setsFindManyArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>;
+    create<T extends quiz_attempt_setsCreateArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsCreateArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    createMany<T extends quiz_attempt_setsCreateManyArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    createManyAndReturn<T extends quiz_attempt_setsCreateManyAndReturnArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>;
+    delete<T extends quiz_attempt_setsDeleteArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsDeleteArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    update<T extends quiz_attempt_setsUpdateArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsUpdateArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    deleteMany<T extends quiz_attempt_setsDeleteManyArgs>(args?: Prisma.SelectSubset<T, quiz_attempt_setsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateMany<T extends quiz_attempt_setsUpdateManyArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<Prisma.BatchPayload>;
+    updateManyAndReturn<T extends quiz_attempt_setsUpdateManyAndReturnArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>;
+    upsert<T extends quiz_attempt_setsUpsertArgs>(args: Prisma.SelectSubset<T, quiz_attempt_setsUpsertArgs<ExtArgs>>): Prisma.Prisma__quiz_attempt_setsClient<runtime.Types.Result.GetResult<Prisma.$quiz_attempt_setsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>;
+    count<T extends quiz_attempt_setsCountArgs>(args?: Prisma.Subset<T, quiz_attempt_setsCountArgs>): Prisma.PrismaPromise<T extends runtime.Types.Utils.Record<'select', any> ? T['select'] extends true ? number : Prisma.GetScalarType<T['select'], Quiz_attempt_setsCountAggregateOutputType> : number>;
+    aggregate<T extends Quiz_attempt_setsAggregateArgs>(args: Prisma.Subset<T, Quiz_attempt_setsAggregateArgs>): Prisma.PrismaPromise<GetQuiz_attempt_setsAggregateType<T>>;
+    groupBy<T extends quiz_attempt_setsGroupByArgs, HasSelectOrTake extends Prisma.Or<Prisma.Extends<'skip', Prisma.Keys<T>>, Prisma.Extends<'take', Prisma.Keys<T>>>, OrderByArg extends Prisma.True extends HasSelectOrTake ? {
+        orderBy: quiz_attempt_setsGroupByArgs['orderBy'];
+    } : {
+        orderBy?: quiz_attempt_setsGroupByArgs['orderBy'];
+    }, OrderFields extends Prisma.ExcludeUnderscoreKeys<Prisma.Keys<Prisma.MaybeTupleToUnion<T['orderBy']>>>, ByFields extends Prisma.MaybeTupleToUnion<T['by']>, ByValid extends Prisma.Has<ByFields, OrderFields>, HavingFields extends Prisma.GetHavingFields<T['having']>, HavingValid extends Prisma.Has<ByFields, HavingFields>, ByEmpty extends T['by'] extends never[] ? Prisma.True : Prisma.False, InputErrors extends ByEmpty extends Prisma.True ? `Error: "by" must not be empty.` : HavingValid extends Prisma.False ? {
+        [P in HavingFields]: P extends ByFields ? never : P extends string ? `Error: Field "${P}" used in "having" needs to be provided in "by".` : [
+            Error,
+            'Field ',
+            P,
+            ` in "having" needs to be provided in "by"`
+        ];
+    }[HavingFields] : 'take' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "take", you also need to provide "orderBy"' : 'skip' extends Prisma.Keys<T> ? 'orderBy' extends Prisma.Keys<T> ? ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields] : 'Error: If you provide "skip", you also need to provide "orderBy"' : ByValid extends Prisma.True ? {} : {
+        [P in OrderFields]: P extends ByFields ? never : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`;
+    }[OrderFields]>(args: Prisma.SubsetIntersection<T, quiz_attempt_setsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetQuiz_attempt_setsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>;
+    readonly fields: quiz_attempt_setsFieldRefs;
+}
+export interface Prisma__quiz_attempt_setsClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise";
+    users<T extends Prisma.quiz_attempt_sets$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.quiz_attempt_sets$usersArgs<ExtArgs>>): Prisma.Prisma__usersClient<runtime.Types.Result.GetResult<Prisma.$usersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    lessons<T extends Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.quiz_attempt_sets$lessonsArgs<ExtArgs>>): Prisma.Prisma__lessonsClient<runtime.Types.Result.GetResult<Prisma.$lessonsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    quiz_attempts<T extends Prisma.quiz_attempt_sets$quiz_attemptsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.quiz_attempt_sets$quiz_attemptsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$quiz_attemptsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>;
+    registrations<T extends Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.quiz_attempt_sets$registrationsArgs<ExtArgs>>): Prisma.Prisma__registrationsClient<runtime.Types.Result.GetResult<Prisma.$registrationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>;
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): runtime.Types.Utils.JsPromise<TResult1 | TResult2>;
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): runtime.Types.Utils.JsPromise<T | TResult>;
+    finally(onfinally?: (() => void) | undefined | null): runtime.Types.Utils.JsPromise<T>;
+}
+export interface quiz_attempt_setsFieldRefs {
+    readonly attempt_set_id: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly user_id: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly lesson_id: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly reg_id: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly average_score: Prisma.FieldRef<"quiz_attempt_sets", 'Decimal'>;
+    readonly total_questions: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly correct_count: Prisma.FieldRef<"quiz_attempt_sets", 'Int'>;
+    readonly created_at: Prisma.FieldRef<"quiz_attempt_sets", 'DateTime'>;
+}
+export type quiz_attempt_setsFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+};
+export type quiz_attempt_setsFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+};
+export type quiz_attempt_setsFindFirstArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    orderBy?: Prisma.quiz_attempt_setsOrderByWithRelationInput | Prisma.quiz_attempt_setsOrderByWithRelationInput[];
+    cursor?: Prisma.quiz_attempt_setsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Quiz_attempt_setsScalarFieldEnum | Prisma.Quiz_attempt_setsScalarFieldEnum[];
+};
+export type quiz_attempt_setsFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    orderBy?: Prisma.quiz_attempt_setsOrderByWithRelationInput | Prisma.quiz_attempt_setsOrderByWithRelationInput[];
+    cursor?: Prisma.quiz_attempt_setsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Quiz_attempt_setsScalarFieldEnum | Prisma.Quiz_attempt_setsScalarFieldEnum[];
+};
+export type quiz_attempt_setsFindManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    orderBy?: Prisma.quiz_attempt_setsOrderByWithRelationInput | Prisma.quiz_attempt_setsOrderByWithRelationInput[];
+    cursor?: Prisma.quiz_attempt_setsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Quiz_attempt_setsScalarFieldEnum | Prisma.Quiz_attempt_setsScalarFieldEnum[];
+};
+export type quiz_attempt_setsCreateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsCreateInput, Prisma.quiz_attempt_setsUncheckedCreateInput>;
+};
+export type quiz_attempt_setsCreateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.quiz_attempt_setsCreateManyInput | Prisma.quiz_attempt_setsCreateManyInput[];
+    skipDuplicates?: boolean;
+};
+export type quiz_attempt_setsCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelectCreateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    data: Prisma.quiz_attempt_setsCreateManyInput | Prisma.quiz_attempt_setsCreateManyInput[];
+    skipDuplicates?: boolean;
+    include?: Prisma.quiz_attempt_setsIncludeCreateManyAndReturn<ExtArgs> | null;
+};
+export type quiz_attempt_setsUpdateArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateInput, Prisma.quiz_attempt_setsUncheckedUpdateInput>;
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+};
+export type quiz_attempt_setsUpdateManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateManyMutationInput, Prisma.quiz_attempt_setsUncheckedUpdateManyInput>;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    limit?: number;
+};
+export type quiz_attempt_setsUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelectUpdateManyAndReturn<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    data: Prisma.XOR<Prisma.quiz_attempt_setsUpdateManyMutationInput, Prisma.quiz_attempt_setsUncheckedUpdateManyInput>;
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    limit?: number;
+    include?: Prisma.quiz_attempt_setsIncludeUpdateManyAndReturn<ExtArgs> | null;
+};
+export type quiz_attempt_setsUpsertArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+    create: Prisma.XOR<Prisma.quiz_attempt_setsCreateInput, Prisma.quiz_attempt_setsUncheckedCreateInput>;
+    update: Prisma.XOR<Prisma.quiz_attempt_setsUpdateInput, Prisma.quiz_attempt_setsUncheckedUpdateInput>;
+};
+export type quiz_attempt_setsDeleteArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+    where: Prisma.quiz_attempt_setsWhereUniqueInput;
+};
+export type quiz_attempt_setsDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    where?: Prisma.quiz_attempt_setsWhereInput;
+    limit?: number;
+};
+export type quiz_attempt_sets$usersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.usersSelect<ExtArgs> | null;
+    omit?: Prisma.usersOmit<ExtArgs> | null;
+    include?: Prisma.usersInclude<ExtArgs> | null;
+    where?: Prisma.usersWhereInput;
+};
+export type quiz_attempt_sets$lessonsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.lessonsSelect<ExtArgs> | null;
+    omit?: Prisma.lessonsOmit<ExtArgs> | null;
+    include?: Prisma.lessonsInclude<ExtArgs> | null;
+    where?: Prisma.lessonsWhereInput;
+};
+export type quiz_attempt_sets$quiz_attemptsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attemptsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attemptsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attemptsInclude<ExtArgs> | null;
+    where?: Prisma.quiz_attemptsWhereInput;
+    orderBy?: Prisma.quiz_attemptsOrderByWithRelationInput | Prisma.quiz_attemptsOrderByWithRelationInput[];
+    cursor?: Prisma.quiz_attemptsWhereUniqueInput;
+    take?: number;
+    skip?: number;
+    distinct?: Prisma.Quiz_attemptsScalarFieldEnum | Prisma.Quiz_attemptsScalarFieldEnum[];
+};
+export type quiz_attempt_sets$registrationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.registrationsSelect<ExtArgs> | null;
+    omit?: Prisma.registrationsOmit<ExtArgs> | null;
+    include?: Prisma.registrationsInclude<ExtArgs> | null;
+    where?: Prisma.registrationsWhereInput;
+};
+export type quiz_attempt_setsDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+    select?: Prisma.quiz_attempt_setsSelect<ExtArgs> | null;
+    omit?: Prisma.quiz_attempt_setsOmit<ExtArgs> | null;
+    include?: Prisma.quiz_attempt_setsInclude<ExtArgs> | null;
+};
+export {};
