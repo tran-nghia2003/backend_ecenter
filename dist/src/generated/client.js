@@ -25,4 +25,6 @@ __exportStar(require("./enums"), exports);
 exports.PrismaClient = $Class.getPrismaClientClass(__dirname);
 path.join(__dirname, "query_engine-windows.dll.node");
 path.join(process.cwd(), "src/generated/query_engine-windows.dll.node");
+path.join(__dirname, "libquery_engine-debian-openssl-3.0.x.so.node");
+path.join(process.cwd(), "src/generated/libquery_engine-debian-openssl-3.0.x.so.node");
 //# sourceMappingURL=client.js.map
